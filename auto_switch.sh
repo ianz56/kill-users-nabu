@@ -16,10 +16,10 @@ LOGFILE="$MODDIR/auto_switch.log"
 # ── Configuration ──────────────────────────────────────────────────
 # Timeout in seconds before auto-switch (default: 5 minutes = 300s)
 # You can change this value to suit your preference.
-TIMEOUT=300
+TIMEOUT=600
 
 # How often to check screen state (in seconds)
-POLL_INTERVAL=30
+POLL_INTERVAL=60
 # ───────────────────────────────────────────────────────────────────
 
 log() {
