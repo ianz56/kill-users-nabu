@@ -50,3 +50,12 @@ echo "$USERS" | while IFS= read -r line; do
 done
 
 log "Done ✓"
+
+# --- Start auto-switch daemon ---
+# Monitors screen state and auto-switches to user 0
+# when screen is off for too long on a secondary user.
+if [ -f "$MODDIR/auto_switch.sh" ]; then
+  log "Starting auto-switch daemon..."
+  sh "$MODDIR/auto_switch.sh" &
+  log "Auto-switch daemon launched (PID: $!)"
+fi

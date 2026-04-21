@@ -21,6 +21,7 @@ $filesToInclude = @(
     "module.prop",
     "service.sh",
     "action.sh",
+    "auto_switch.sh",
     "customize.sh",
     "META-INF/com/google/android/update-binary",
     "META-INF/com/google/android/updater-script"

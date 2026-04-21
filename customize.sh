@@ -19,10 +19,14 @@ ui_print ""
 ui_print "  Action button in Magisk Manager:"
 ui_print "  Instantly kill all background users."
 ui_print ""
+ui_print "  Auto-switch to user 0 when screen"
+ui_print "  is off for 5 min on secondary user."
+ui_print ""
 
 # Set proper permissions for scripts
 set_perm "$MODPATH/service.sh" 0 0 0755
 set_perm "$MODPATH/action.sh" 0 0 0755
+set_perm "$MODPATH/auto_switch.sh" 0 0 0755
 
 ui_print "  ✓ Installation complete!"
 ui_print "  ✓ Reboot to activate."
