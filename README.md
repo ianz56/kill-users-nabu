@@ -48,6 +48,7 @@ kill-users/
 ├── module.prop                # Metadata modul (nama, versi, dll)
 ├── service.sh                 # Script utama — jalan saat boot
 ├── action.sh                  # Tombol Action di Magisk Manager
+├── auto_switch.sh             # Daemon auto-switch ke user 0
 ├── customize.sh               # Script instalasi — tampil saat flash
 ├── build.ps1                  # Build script (Windows)
 └── README.md                  # File ini
@@ -60,7 +61,21 @@ kill-users/
 1. **Boot** → Magisk menjalankan `service.sh` pada trigger `late_start`
 2. **Tunggu boot selesai** → Script menunggu `sys.boot_completed == 1` (max 120 detik)
 3. **Apply setting** → Menjalankan `am set-stop-user-on-switch true`
-4. **Log** → Semua aktivitas dicatat di `/data/adb/modules/kill-users-on-switch/service.log`
+4. **Launch daemon** → Menjalankan `auto_switch.sh` di background
+5. **Log** → Semua aktivitas dicatat di `/data/adb/modules/kill-users-on-switch/service.log`
+
+### Auto-Switch Daemon (`auto_switch.sh`)
+
+Daemon background yang mencegah boros baterai & RAM kalau kamu lupa switch balik ke user utama.
+
+Cara kerjanya:
+
+- Setiap 30 detik, cek status layar dan user aktif
+- Kalau **layar mati** + kamu di **user selain 0** → mulai hitung mundur **5 menit**
+- Kalau **5 menit berlalu** → otomatis `am switch-user 0` (user secondary auto-stop karena `stop-on-switch`)
+- Kalau **layar nyala** sebelum timeout → timer di-reset, tidak jadi switch
+
+Timeout bisa diubah di `auto_switch.sh` variabel `TIMEOUT` (default: 300 detik = 5 menit).
 
 ### Tombol Action di Magisk Manager (`action.sh`)
 
@@ -79,11 +94,14 @@ Berguna kalau kamu mau kill user background secara manual tanpa harus buka termi
 Untuk melihat apakah modul berjalan dengan benar setelah reboot:
 
 ```bash
-# Via ADB atau terminal root
+# Log boot & setting
 cat /data/adb/modules/kill-users-on-switch/service.log
+
+# Log auto-switch daemon
+cat /data/adb/modules/kill-users-on-switch/auto_switch.log
 ```
 
-Contoh output:
+Contoh output service.log:
 
 ```
 2026-04-21 18:50:00 | Module started, waiting for boot to complete...
@@ -94,6 +112,18 @@ Contoh output:
 2026-04-21 18:50:13 |           UserInfo{0:Ian Perdiansah:4c13} running
 2026-04-21 18:50:13 |           UserInfo{10:security space:413}
 2026-04-21 18:50:13 | Done ✓
+2026-04-21 18:50:13 | Starting auto-switch daemon...
+2026-04-21 18:50:13 | Auto-switch daemon launched (PID: 1234)
+```
+
+Contoh output auto_switch.log:
+
+```
+2026-04-21 19:00:00 | Auto-switch daemon started (timeout=300s, poll=30s)
+2026-04-21 20:15:30 | Screen off on user 10 — timer started (300s)
+2026-04-21 20:20:30 | Timeout reached (300s) — switching to user 0...
+2026-04-21 20:20:31 | am switch-user 0 → Success
+2026-04-21 20:20:36 | Current user is now: 0
 ```
 
 ## ⚙️ Versi yang Didukung
