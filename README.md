@@ -1,6 +1,6 @@
 # Kill Users on Switch — Magisk Module
 
-Modul Magisk yang secara otomatis menjalankan `am set-stop-user-on-switch true` setiap kali perangkat di-boot. Dengan modul ini, ketika kamu berpindah user, user sebelumnya akan otomatis di-stop (killed) — tanpa perlu setting manual lagi.
+Modul Magisk yang secara otomatis menjalankan `am set-stop-user-on-switch true` setiap kali perangkat di-boot, sekaligus memaksa refresh rate user aktif tetap di **60Hz**. Dengan modul ini, ketika kamu berpindah user, user sebelumnya akan otomatis di-stop (killed) dan refresh rate tidak gampang balik ke mode dinamis.
 
 ## 🎯 Masalah yang Diselesaikan
 
@@ -61,21 +61,22 @@ kill-users/
 1. **Boot** → Magisk menjalankan `service.sh` pada trigger `late_start`
 2. **Tunggu boot selesai** → Script menunggu `sys.boot_completed == 1` (max 120 detik)
 3. **Apply setting** → Menjalankan `am set-stop-user-on-switch true`
-4. **Launch daemon** → Menjalankan `auto_switch.sh` di background
+4. **Launch daemon** → Menjalankan `auto_switch.sh` di background untuk monitor user aktif + enforce 60Hz
 5. **Log** → Semua aktivitas dicatat di `/data/adb/modules/kill-users-on-switch/service.log`
 
 ### Auto-Switch Daemon (`auto_switch.sh`)
 
-Daemon background yang mencegah boros baterai & RAM kalau kamu lupa switch balik ke user utama.
+Daemon background yang mencegah boros baterai & RAM kalau kamu lupa switch balik ke user utama, sekaligus re-apply refresh rate 60Hz saat foreground user berubah.
 
 Cara kerjanya:
 
-- Setiap 30 detik, cek status layar dan user aktif
+- Setiap 10 detik, cek status layar dan user aktif
+- Kalau foreground user berubah → paksa setting refresh rate user tersebut ke `60Hz` (`peak_refresh_rate`, `min_refresh_rate`, `user_refresh_rate`, `miui_refresh_rate`)
 - Kalau **layar mati** + kamu di **user selain 0** → mulai hitung mundur **5 menit**
 - Kalau **5 menit berlalu** → otomatis `am switch-user 0` (user secondary auto-stop karena `stop-on-switch`)
 - Kalau **layar nyala** sebelum timeout → timer di-reset, tidak jadi switch
 
-Timeout bisa diubah di `auto_switch.sh` variabel `TIMEOUT` (default: 300 detik = 5 menit).
+Timeout bisa diubah di `auto_switch.sh` variabel `TIMEOUT` (default: 600 detik = 10 menit).
 
 ### Tombol Action di Magisk Manager (`action.sh`)
 
@@ -84,6 +85,7 @@ Buka **Magisk Manager** → **Modules** → klik ikon ⚙️ **Action** pada mod
 Fungsinya:
 
 - Re-enable `am set-stop-user-on-switch true`
+- Re-apply refresh rate 60Hz untuk user aktif
 - **Kill (stop) semua user** selain user utama (user 0)
 - Menampilkan status user sebelum dan sesudah
 

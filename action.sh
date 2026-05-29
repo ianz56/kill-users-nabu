@@ -9,11 +9,25 @@ echo "  Kill Users on Switch — Action"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 
+REFRESH_RATE=60
+CURRENT_USER=$(am get-current-user 2>/dev/null)
+
 # Ensure stop-on-switch is enabled
 RESULT=$(am set-stop-user-on-switch true 2>&1)
 echo "[*] am set-stop-user-on-switch true"
 echo "    -> $RESULT"
 echo ""
+
+if [ -n "$CURRENT_USER" ]; then
+  settings --user "$CURRENT_USER" put system peak_refresh_rate "${REFRESH_RATE}.0" >/dev/null 2>&1
+  settings --user "$CURRENT_USER" put system min_refresh_rate "${REFRESH_RATE}.0" >/dev/null 2>&1
+  settings --user "$CURRENT_USER" put system user_refresh_rate "$REFRESH_RATE" >/dev/null 2>&1
+  settings --user "$CURRENT_USER" put system miui_refresh_rate "$REFRESH_RATE" >/dev/null 2>&1
+
+  echo "[*] Lock refresh rate ke ${REFRESH_RATE}Hz untuk user $CURRENT_USER"
+  echo "    -> peak=$(settings --user "$CURRENT_USER" get system peak_refresh_rate 2>/dev/null), min=$(settings --user "$CURRENT_USER" get system min_refresh_rate 2>/dev/null)"
+  echo ""
+fi
 
 # Get list of running user IDs (exclude user 0)
 echo "[*] Scanning for running background users..."

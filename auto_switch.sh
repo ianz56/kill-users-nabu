@@ -1,8 +1,9 @@
 #!/system/bin/sh
 # Kill Users on Switch — Auto Switch Daemon
 # ============================================
-# Background daemon that monitors screen state. When the screen is off
-# and the current foreground user is NOT user 0, it waits for a
+# Background daemon that monitors screen state and foreground user
+# changes. It re-applies a 60Hz refresh-rate lock for the active user,
+# and when the screen is off on a secondary user it waits for a
 # configurable timeout and then auto-switches back to user 0.
 # Combined with 'am set-stop-user-on-switch true', this effectively
 # kills the secondary user automatically.
@@ -14,12 +15,15 @@ MODDIR="${0%/*}"
 LOGFILE="$MODDIR/auto_switch.log"
 
 # ── Configuration ──────────────────────────────────────────────────
-# Timeout in seconds before auto-switch (default: 5 minutes = 300s)
+# Refresh rate to enforce for the active user.
+REFRESH_RATE=60
+
+# Timeout in seconds before auto-switch (default: 10 minutes = 600s)
 # You can change this value to suit your preference.
 TIMEOUT=600
 
-# How often to check screen state (in seconds)
-POLL_INTERVAL=60
+# How often to check screen state / active user (in seconds)
+POLL_INTERVAL=10
 # ───────────────────────────────────────────────────────────────────
 
 log() {
@@ -40,21 +44,46 @@ get_current_user() {
   am get-current-user 2>/dev/null
 }
 
-log "Auto-switch daemon started (timeout=${TIMEOUT}s, poll=${POLL_INTERVAL}s)"
+apply_refresh_lock() {
+  USER_ID="$1"
+
+  [ -z "$USER_ID" ] && return 1
+
+  settings --user "$USER_ID" put system peak_refresh_rate "${REFRESH_RATE}.0" >/dev/null 2>&1
+  settings --user "$USER_ID" put system min_refresh_rate "${REFRESH_RATE}.0" >/dev/null 2>&1
+  settings --user "$USER_ID" put system user_refresh_rate "$REFRESH_RATE" >/dev/null 2>&1
+  settings --user "$USER_ID" put system miui_refresh_rate "$REFRESH_RATE" >/dev/null 2>&1
+
+  PEAK_RATE=$(settings --user "$USER_ID" get system peak_refresh_rate 2>/dev/null)
+  MIN_RATE=$(settings --user "$USER_ID" get system min_refresh_rate 2>/dev/null)
+  USER_RATE=$(settings --user "$USER_ID" get system user_refresh_rate 2>/dev/null)
+  MIUI_RATE=$(settings --user "$USER_ID" get system miui_refresh_rate 2>/dev/null)
+
+  log "Refresh lock applied for user $USER_ID (peak=$PEAK_RATE, min=$MIN_RATE, user=$USER_RATE, miui=$MIUI_RATE)"
+}
+
+log "Auto-switch daemon started (refresh=${REFRESH_RATE}Hz, timeout=${TIMEOUT}s, poll=${POLL_INTERVAL}s)"
 
 # Track when the screen turned off while on a secondary user
 SCREEN_OFF_TIMESTAMP=0
-LAST_STATE="unknown"
+LAST_USER=""
 
 while true; do
-  sleep "$POLL_INTERVAL"
-
   SCREEN_STATE=$(get_screen_state)
   CURRENT_USER=$(get_current_user)
 
   # Skip if we can't determine state
-  [ -z "$SCREEN_STATE" ] && continue
-  [ -z "$CURRENT_USER" ] && continue
+  if [ -z "$SCREEN_STATE" ] || [ -z "$CURRENT_USER" ]; then
+    sleep "$POLL_INTERVAL"
+    continue
+  fi
+
+  if [ "$CURRENT_USER" != "$LAST_USER" ]; then
+    log "Foreground user changed to $CURRENT_USER — enforcing ${REFRESH_RATE}Hz"
+    apply_refresh_lock "$CURRENT_USER"
+    LAST_USER="$CURRENT_USER"
+    SCREEN_OFF_TIMESTAMP=0
+  fi
 
   if [ "$SCREEN_STATE" = "Asleep" ] || [ "$SCREEN_STATE" = "Dozing" ]; then
     # ── Screen is OFF ──
@@ -78,6 +107,10 @@ while true; do
         sleep 5
         NEW_USER=$(get_current_user)
         log "Current user is now: $NEW_USER"
+        if [ "$NEW_USER" = "0" ]; then
+          apply_refresh_lock "$NEW_USER"
+          LAST_USER="$NEW_USER"
+        fi
 
         # Reset timer
         SCREEN_OFF_TIMESTAMP=0
@@ -93,4 +126,6 @@ while true; do
       SCREEN_OFF_TIMESTAMP=0
     fi
   fi
+
+  sleep "$POLL_INTERVAL"
 done
