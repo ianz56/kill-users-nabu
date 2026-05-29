@@ -3,4 +3,4 @@ name=Kill Users on Switch
 version=v1.0.0
 versionCode=1
 author=Ian Perdiansah
-description=Automatically stop background users when switching. Runs 'am set-stop-user-on-switch true' on every boot so you never have to set it manually again.
+description=Automatically stop background users when switching and re-apply a 60Hz refresh-rate lock for the active user so it does not fall back to dynamic after user changes.
