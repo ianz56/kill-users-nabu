@@ -72,8 +72,8 @@ Cara kerjanya:
 
 - Setiap 10 detik, cek status layar dan user aktif
 - Kalau foreground user berubah → paksa setting refresh rate user tersebut ke `60Hz` (`peak_refresh_rate`, `min_refresh_rate`, `user_refresh_rate`, `miui_refresh_rate`)
-- Kalau **layar mati** + kamu di **user selain 0** → mulai hitung mundur **5 menit**
-- Kalau **5 menit berlalu** → otomatis `am switch-user 0` (user secondary auto-stop karena `stop-on-switch`)
+- Kalau **layar mati** + kamu di **user selain 0** → mulai hitung mundur **10 menit**
+- Kalau **10 menit berlalu** → otomatis `am switch-user 0` (user secondary auto-stop karena `stop-on-switch`)
 - Kalau **layar nyala** sebelum timeout → timer di-reset, tidak jadi switch
 
 Timeout bisa diubah di `auto_switch.sh` variabel `TIMEOUT` (default: 600 detik = 10 menit).
@@ -121,9 +121,9 @@ Contoh output service.log:
 Contoh output auto_switch.log:
 
 ```
-2026-04-21 19:00:00 | Auto-switch daemon started (timeout=300s, poll=30s)
-2026-04-21 20:15:30 | Screen off on user 10 — timer started (300s)
-2026-04-21 20:20:30 | Timeout reached (300s) — switching to user 0...
+2026-04-21 19:00:00 | Auto-switch daemon started (refresh=60Hz, timeout=600s, poll=10s)
+2026-04-21 20:15:30 | Screen off on user 10 — timer started (600s)
+2026-04-21 20:25:30 | Timeout reached (600s) — switching to user 0...
 2026-04-21 20:20:31 | am switch-user 0 → Success
 2026-04-21 20:20:36 | Current user is now: 0
 ```
