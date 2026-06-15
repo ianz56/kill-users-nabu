@@ -1,0 +1,112 @@
+name: Build and Release Magisk Module
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      release:
+        description: 'Create or update GitHub Release'
+        required: true
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
+      tag:
+        description: 'Release tag. Leave empty to use version from module.prop'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build module ZIP
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install zip
+        run: sudo apt-get update && sudo apt-get install -y zip
+
+      - name: Read module metadata
+        id: meta
+        shell: bash
+        run: |
+          MODULE_ID="$(grep -E '^id=' module.prop | cut -d= -f2- | tr -d '\r')"
+          MODULE_NAME="$(grep -E '^name=' module.prop | cut -d= -f2- | tr -d '\r')"
+          MODULE_VERSION="$(grep -E '^version=' module.prop | cut -d= -f2- | tr -d '\r')"
+          MODULE_VERSION_CODE="$(grep -E '^versionCode=' module.prop | cut -d= -f2- | tr -d '\r')"
+
+          if [ -z "$MODULE_ID" ] || [ -z "$MODULE_VERSION" ]; then
+            echo "module.prop must contain id= and version=" >&2
+            exit 1
+          fi
+
+          TAG_INPUT="${{ github.event.inputs.tag }}"
+
+          if [ "${{ github.ref_type }}" = "tag" ]; then
+            RELEASE_TAG="${{ github.ref_name }}"
+          elif [ -n "$TAG_INPUT" ]; then
+            RELEASE_TAG="$TAG_INPUT"
+          else
+            RELEASE_TAG="$MODULE_VERSION"
+          fi
+
+          ZIP_NAME="${MODULE_ID}-${MODULE_VERSION}.zip"
+
+          echo "module_id=$MODULE_ID" >> "$GITHUB_OUTPUT"
+          echo "module_name=$MODULE_NAME" >> "$GITHUB_OUTPUT"
+          echo "module_version=$MODULE_VERSION" >> "$GITHUB_OUTPUT"
+          echo "module_version_code=$MODULE_VERSION_CODE" >> "$GITHUB_OUTPUT"
+          echo "release_tag=$RELEASE_TAG" >> "$GITHUB_OUTPUT"
+          echo "zip_name=$ZIP_NAME" >> "$GITHUB_OUTPUT"
+
+          echo "Module: $MODULE_NAME"
+          echo "Version: $MODULE_VERSION ($MODULE_VERSION_CODE)"
+          echo "ZIP: $ZIP_NAME"
+          echo "Release tag: $RELEASE_TAG"
+
+      - name: Build module ZIP
+        shell: bash
+        run: |
+          mkdir -p dist
+          zip -r "dist/${{ steps.meta.outputs.zip_name }}" \
+            module.prop \
+            service.sh \
+            action.sh \
+            auto_switch.sh \
+            customize.sh \
+            META-INF
+
+          unzip -l "dist/${{ steps.meta.outputs.zip_name }}"
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.meta.outputs.zip_name }}
+          path: dist/${{ steps.meta.outputs.zip_name }}
+          if-no-files-found: error
+
+      - name: Create or update GitHub Release
+        if: github.ref_type == 'tag' || github.event.inputs.release == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: ${{ steps.meta.outputs.release_tag }}
+          ZIP_PATH: dist/${{ steps.meta.outputs.zip_name }}
+          MODULE_NAME: ${{ steps.meta.outputs.module_name }}
+          MODULE_VERSION: ${{ steps.meta.outputs.module_version }}
+        shell: bash
+        run: |
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release upload "$RELEASE_TAG" "$ZIP_PATH" --clobber
+          else
+            gh release create "$RELEASE_TAG" "$ZIP_PATH" \
+              --title "$MODULE_NAME $MODULE_VERSION" \
+              --notes "Automated Magisk module build for $MODULE_NAME $MODULE_VERSION."
+          fi
