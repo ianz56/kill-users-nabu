@@ -107,6 +107,7 @@ jobs:
             gh release upload "$RELEASE_TAG" "$ZIP_PATH" --clobber
           else
             gh release create "$RELEASE_TAG" "$ZIP_PATH" \
+              --target "$GITHUB_SHA" \
               --title "$MODULE_NAME $MODULE_VERSION" \
               --notes "Automated Magisk module build for $MODULE_NAME $MODULE_VERSION."
           fi
