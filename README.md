@@ -51,6 +51,36 @@ Kalau command DisplayManager tidak tersedia di ROM kamu, modul tetap jalan karen
    ```
 3. Flash file ZIP yang dihasilkan via Magisk Manager
 
+## 🚀 Build Otomatis & Release
+
+Repo ini punya GitHub Actions workflow di `.github/workflows/build-release.yml`.
+
+Workflow akan:
+
+- Membaca `id`, `name`, `version`, dan `versionCode` dari `module.prop`
+- Membuat ZIP dengan format `kill-users-on-switch-v1.0.1.zip`
+- Upload ZIP sebagai artifact di tab **Actions**
+- Membuat atau memperbarui **GitHub Release** kalau workflow dijalankan dari tag `v*` atau manual dengan opsi release aktif
+
+### Rilis via tag
+
+```sh
+git tag v1.0.1
+git push origin v1.0.1
+```
+
+Setelah tag dipush, GitHub Actions akan build ZIP dan membuat release otomatis.
+
+### Rilis manual dari GitHub
+
+1. Buka tab **Actions**
+2. Pilih workflow **Build and Release Magisk Module**
+3. Klik **Run workflow**
+4. Set `release` ke `true`
+5. Isi `tag` jika mau custom, atau kosongkan untuk memakai versi dari `module.prop`
+
+Kalau `release=false`, workflow hanya build ZIP dan menyimpannya sebagai artifact tanpa membuat release.
+
 ## 📁 Struktur Modul
 
 ```text
