@@ -14,6 +14,14 @@ on:
         options:
           - 'false'
           - 'true'
+      prerelease:
+        description: 'Mark as pre-release'
+        required: true
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
       tag:
         description: 'Release tag. Leave empty to use version from module.prop'
         required: false
@@ -60,17 +68,28 @@ jobs:
 
           ZIP_NAME="${MODULE_ID}-${MODULE_VERSION}.zip"
 
+          # Determine if this should be a pre-release
+          # Marked as prerelease if manual trigger 'prerelease' is 'true' OR if the tag matches prerelease formats (e.g., contains rc, beta, alpha, pre, or -)
+          IS_PRERELEASE="false"
+          if [ "${{ github.event.inputs.prerelease }}" = "true" ]; then
+            IS_PRERELEASE="true"
+          elif [ "${{ github.ref_type }}" = "tag" ] && [[ "$RELEASE_TAG" =~ [.-](rc|beta|alpha|pre|preview|b|a) ]]; then
+            IS_PRERELEASE="true"
+          fi
+
           echo "module_id=$MODULE_ID" >> "$GITHUB_OUTPUT"
           echo "module_name=$MODULE_NAME" >> "$GITHUB_OUTPUT"
           echo "module_version=$MODULE_VERSION" >> "$GITHUB_OUTPUT"
           echo "module_version_code=$MODULE_VERSION_CODE" >> "$GITHUB_OUTPUT"
           echo "release_tag=$RELEASE_TAG" >> "$GITHUB_OUTPUT"
           echo "zip_name=$ZIP_NAME" >> "$GITHUB_OUTPUT"
+          echo "is_prerelease=$IS_PRERELEASE" >> "$GITHUB_OUTPUT"
 
           echo "Module: $MODULE_NAME"
           echo "Version: $MODULE_VERSION ($MODULE_VERSION_CODE)"
           echo "ZIP: $ZIP_NAME"
           echo "Release tag: $RELEASE_TAG"
+          echo "Pre-release: $IS_PRERELEASE"
 
       - name: Build module ZIP
         shell: bash
@@ -101,13 +120,25 @@ jobs:
           ZIP_PATH: dist/${{ steps.meta.outputs.zip_name }}
           MODULE_NAME: ${{ steps.meta.outputs.module_name }}
           MODULE_VERSION: ${{ steps.meta.outputs.module_version }}
+          IS_PRERELEASE: ${{ steps.meta.outputs.is_prerelease }}
         shell: bash
         run: |
+          PRERELEASE_FLAG=""
+          if [ "$IS_PRERELEASE" = "true" ]; then
+            PRERELEASE_FLAG="--prerelease"
+          fi
+
           if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            # If release exists, upload the artifact (can also modify prerelease status if needed)
             gh release upload "$RELEASE_TAG" "$ZIP_PATH" --clobber
+            if [ "$IS_PRERELEASE" = "true" ]; then
+              gh release edit "$RELEASE_TAG" --prerelease
+            fi
           else
             gh release create "$RELEASE_TAG" "$ZIP_PATH" \
+              $PRERELEASE_FLAG \
               --target "$GITHUB_SHA" \
               --title "$MODULE_NAME $MODULE_VERSION" \
               --notes "Automated Magisk module build for $MODULE_NAME $MODULE_VERSION."
           fi
+
