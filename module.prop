@@ -1,7 +1,7 @@
 id=kill-users-on-switch
 name=Kill Users on Switch
-version=v1.0.2
-versionCode=3
+version=v1.0.3
+versionCode=4
 author=Ian Perdiansah
-description=Automatically stop background users when switching, enable GMS/GSF support on CN ROM, and aggressively lock refresh-rate.
+description=Automatically stop background users when switching, enable GMS/GSF support on CN ROM via GmsCore dummy path, and aggressively lock refresh-rate.
 

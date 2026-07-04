@@ -2,7 +2,7 @@
 # Run this in PowerShell from the project directory
 
 $ModuleName = "kill-users-on-switch"
-$Version = "v1.0.2"
+$Version = "v1.0.3"
 $ZipName = "$ModuleName-$Version.zip"
 $ZipPath = Join-Path $PWD $ZipName
 
@@ -24,6 +24,7 @@ $filesToInclude = @(
     "auto_switch.sh",
     "customize.sh",
     "system.prop",
+    "system/product/priv-app/GmsCore/.gitkeep",
     "META-INF/com/google/android/update-binary",
     "META-INF/com/google/android/updater-script"
 )
