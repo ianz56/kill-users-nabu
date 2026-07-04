@@ -41,8 +41,9 @@ log "am set-stop-user-on-switch true → $RESULT"
 
 # --- Enable GMS components if disabled ---
 log "Enabling Google Services Framework and Play Services..."
-pm enable com.google.android.gsf >> "$LOGFILE" 2>&1
-pm enable com.google.android.gms >> "$LOGFILE" 2>&1
+pm enable com.google.android.gsf >> "$LOGFILE" 2>&1 &
+pm enable com.google.android.gms >> "$LOGFILE" 2>&1 &
+
 
 
 # --- Verify ---
