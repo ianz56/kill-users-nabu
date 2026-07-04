@@ -1,6 +1,7 @@
 id=kill-users-on-switch
 name=Kill Users on Switch
-version=v1.0.1
-versionCode=2
+version=v1.0.2
+versionCode=3
 author=Ian Perdiansah
-description=Automatically stop background users when switching and aggressively re-apply a 60Hz refresh-rate lock across users/global display state so Xiaomi Pad 5 does not fall back to dynamic 120Hz after user changes.
+description=Automatically stop background users when switching, enable GMS/GSF support on CN ROM, and aggressively lock refresh-rate.
+

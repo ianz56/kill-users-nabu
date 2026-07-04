@@ -39,6 +39,12 @@ log "Boot completed after ~${WAITED}s — applying setting..."
 RESULT=$(am set-stop-user-on-switch true 2>&1)
 log "am set-stop-user-on-switch true → $RESULT"
 
+# --- Enable GMS components if disabled ---
+log "Enabling Google Services Framework and Play Services..."
+pm enable com.google.android.gsf >> "$LOGFILE" 2>&1
+pm enable com.google.android.gms >> "$LOGFILE" 2>&1
+
+
 # --- Verify ---
 # Small delay to let the setting take effect, then log the user list
 # so we can confirm everything looks right.

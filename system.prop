@@ -1,0 +1,3 @@
+# Support GMS Core for Xiaomi CN ROM
+ro.miui.support_gms=1
+persist.sys.miui.google.enable=1
