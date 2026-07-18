@@ -1,7 +1,7 @@
 id=kill-users-on-switch
 name=Kill Users on Switch
-version=v1.0.4
-versionCode=5
+version=v1.0.5
+versionCode=6
 author=Ian Perdiansah
-description=Automatically stop background users when switching, enable GMS/GSF support on CN ROM, configure Google Family Link as system privileged app, and lock refresh-rate.
+description=Stop background users, enable GMS/GSF on CN ROM, configure Family Link and GMS Supervision as system privileged apps with deep link permissions, and lock refresh-rate.
 
