@@ -2,7 +2,7 @@
 # Run this in PowerShell from the project directory
 
 $ModuleName = "kill-users-on-switch"
-$Version = "v1.0.3"
+$Version = "v1.0.4"
 $ZipName = "$ModuleName-$Version.zip"
 $ZipPath = Join-Path $PWD $ZipName
 
@@ -24,10 +24,18 @@ $filesToInclude = @(
     "auto_switch.sh",
     "customize.sh",
     "system.prop",
-    "system/product/priv-app/GmsCore/.gitkeep",
     "META-INF/com/google/android/update-binary",
     "META-INF/com/google/android/updater-script"
 )
+
+# Recursively add all files in 'system' folder
+if (Test-Path "system") {
+    $systemFiles = Get-ChildItem -Path "system" -Recurse -File | ForEach-Object {
+        # Make the path relative to the module directory
+        $_.FullName.Substring($PWD.Path.Length + 1)
+    }
+    $filesToInclude += $systemFiles
+}
 
 $zip = [System.IO.Compression.ZipFile]::Open($ZipPath, 'Create')
 
