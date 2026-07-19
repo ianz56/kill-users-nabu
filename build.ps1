@@ -2,7 +2,7 @@
 # Run this in PowerShell from the project directory
 
 $ModuleName = "kill-users-on-switch"
-$Version = "v1.0.5"
+$Version = "v1.0.6"
 $ZipName = "$ModuleName-$Version.zip"
 $ZipPath = Join-Path $PWD $ZipName
 
