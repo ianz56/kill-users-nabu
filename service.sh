@@ -1,6 +1,6 @@
 #!/system/bin/sh
-# Kill Users on Switch — Magisk Module
-# ======================================
+# Nabu CN System & Family Link Helper — Magisk Module
+# ===================================================
 # This script runs at the 'late_start' service trigger on every boot.
 # It waits until the system is fully booted, then enables the
 # stop-user-on-switch setting so that background users are automatically
@@ -53,33 +53,35 @@ enforce_familylink_permissions() {
 
   for u in $USERS; do
     for pkg in com.google.android.apps.kids.familylink com.google.android.apps.kids.familylinkhelper com.google.android.gms.supervision com.google.android.gms; do
-      for perm in \
-        android.permission.SYSTEM_ALERT_WINDOW \
-        android.permission.PACKAGE_USAGE_STATS \
-        android.permission.GET_USAGE_STATS \
-        android.permission.SYSTEM_APPLICATION_OVERLAY \
-        android.permission.SCHEDULE_EXACT_ALARM \
-        android.permission.POST_NOTIFICATIONS \
-        android.permission.GET_ACCOUNTS \
-        android.permission.READ_CONTACTS \
-        android.permission.WRITE_CONTACTS \
-        android.permission.ACCESS_FINE_LOCATION \
-        android.permission.ACCESS_COARSE_LOCATION \
-        android.permission.READ_PHONE_STATE \
-        android.permission.INTERACT_ACROSS_USERS \
-        android.permission.MANAGE_USERS \
-        android.permission.WRITE_SECURE_SETTINGS; do
-          pm grant --user "$u" "$pkg" "$perm" >/dev/null 2>&1
-      done
+      if pm list packages --user "$u" 2>/dev/null | grep -q "$pkg"; then
+        for perm in \
+          android.permission.SYSTEM_ALERT_WINDOW \
+          android.permission.PACKAGE_USAGE_STATS \
+          android.permission.GET_USAGE_STATS \
+          android.permission.SYSTEM_APPLICATION_OVERLAY \
+          android.permission.SCHEDULE_EXACT_ALARM \
+          android.permission.POST_NOTIFICATIONS \
+          android.permission.GET_ACCOUNTS \
+          android.permission.READ_CONTACTS \
+          android.permission.WRITE_CONTACTS \
+          android.permission.ACCESS_FINE_LOCATION \
+          android.permission.ACCESS_COARSE_LOCATION \
+          android.permission.READ_PHONE_STATE \
+          android.permission.INTERACT_ACROSS_USERS \
+          android.permission.MANAGE_USERS \
+          android.permission.WRITE_SECURE_SETTINGS; do
+            pm grant --user "$u" "$pkg" "$perm" >/dev/null 2>&1
+        done
 
-      appops set --user "$u" "$pkg" SYSTEM_ALERT_WINDOW allow >/dev/null 2>&1
-      appops set --user "$u" "$pkg" GET_USAGE_STATS allow >/dev/null 2>&1
-      appops set --user "$u" "$pkg" USE_FULL_SCREEN_INTENT allow >/dev/null 2>&1
-      appops set --user "$u" "$pkg" ACCESS_RESTRICTED_SETTINGS allow >/dev/null 2>&1
-      appops set --user "$u" "$pkg" 10008 allow >/dev/null 2>&1
-      appops set --user "$u" "$pkg" 10021 allow >/dev/null 2>&1
-      appops set --user "$u" "$pkg" 10022 allow >/dev/null 2>&1
-      appops set --user "$u" "$pkg" 10033 allow >/dev/null 2>&1
+        appops set --user "$u" "$pkg" SYSTEM_ALERT_WINDOW allow >/dev/null 2>&1
+        appops set --user "$u" "$pkg" GET_USAGE_STATS allow >/dev/null 2>&1
+        appops set --user "$u" "$pkg" USE_FULL_SCREEN_INTENT allow >/dev/null 2>&1
+        appops set --user "$u" "$pkg" ACCESS_RESTRICTED_SETTINGS allow >/dev/null 2>&1
+        appops set --user "$u" "$pkg" 10008 allow >/dev/null 2>&1
+        appops set --user "$u" "$pkg" 10021 allow >/dev/null 2>&1
+        appops set --user "$u" "$pkg" 10022 allow >/dev/null 2>&1
+        appops set --user "$u" "$pkg" 10033 allow >/dev/null 2>&1
+      fi
     done
   done
   log "Permissions & AppOps enforcement complete."
