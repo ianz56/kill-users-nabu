@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<exceptions>
+  <exception package="com.google.android.apps.kids.familylink">
+    <permission name="android.permission.POST_NOTIFICATIONS" fixed="true"/>
+    <permission name="android.permission.GET_ACCOUNTS" fixed="true"/>
+    <permission name="android.permission.READ_CONTACTS" fixed="true"/>
+    <permission name="android.permission.ACCESS_FINE_LOCATION" fixed="true"/>
+    <permission name="android.permission.ACCESS_COARSE_LOCATION" fixed="true"/>
+    <permission name="android.permission.READ_PHONE_STATE" fixed="true"/>
+  </exception>
+
+  <exception package="com.google.android.apps.kids.familylinkhelper">
+    <permission name="android.permission.POST_NOTIFICATIONS" fixed="true"/>
+    <permission name="android.permission.GET_ACCOUNTS" fixed="true"/>
+    <permission name="android.permission.READ_CONTACTS" fixed="true"/>
+    <permission name="android.permission.ACCESS_FINE_LOCATION" fixed="true"/>
+    <permission name="android.permission.ACCESS_COARSE_LOCATION" fixed="true"/>
+    <permission name="android.permission.READ_PHONE_STATE" fixed="true"/>
+  </exception>
+
+  <exception package="com.google.android.gms.supervision">
+    <permission name="android.permission.POST_NOTIFICATIONS" fixed="true"/>
+    <permission name="android.permission.GET_ACCOUNTS" fixed="true"/>
+    <permission name="android.permission.READ_CONTACTS" fixed="true"/>
+    <permission name="android.permission.WRITE_CONTACTS" fixed="true"/>
+    <permission name="android.permission.ACCESS_FINE_LOCATION" fixed="true"/>
+    <permission name="android.permission.ACCESS_COARSE_LOCATION" fixed="true"/>
+    <permission name="android.permission.READ_PHONE_STATE" fixed="true"/>
+  </exception>
+</exceptions>
