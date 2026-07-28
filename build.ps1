@@ -1,8 +1,8 @@
-# Build script for Kill Users on Switch Magisk Module
+# Build script for Nabu CN System & Family Link Helper Magisk Module
 # Run this in PowerShell from the project directory
 
-$ModuleName = "kill-users-on-switch"
-$Version = "v1.0.8"
+$ModuleName = "nabu-cn-familylink-helper"
+$Version = "v1.0.9"
 $ZipName = "$ModuleName-$Version.zip"
 $ZipPath = Join-Path $PWD $ZipName
 
@@ -24,8 +24,8 @@ $filesToInclude = @(
     "auto_switch.sh",
     "customize.sh",
     "system.prop",
-    "META-INF/com/google/android/update-binary",
-    "META-INF/com/google/android/updater-script"
+    "META-INF\com\google\android\update-binary",
+    "META-INF\com\google\android\updater-script"
 )
 
 # Recursively add all files in 'system' folder
@@ -39,13 +39,28 @@ if (Test-Path "system") {
 
 $zip = [System.IO.Compression.ZipFile]::Open($ZipPath, 'Create')
 
+# Shell scripts that need Unix (LF) line endings for Android
+$shellScripts = @("service.sh", "action.sh", "auto_switch.sh", "customize.sh")
+
 foreach ($file in $filesToInclude) {
     $fullPath = Join-Path $PWD $file
-    $entryName = $file -replace '\\', '/'
-    [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile(
-        $zip, $fullPath, $entryName, [System.IO.Compression.CompressionLevel]::Optimal
-    ) | Out-Null
-    Write-Host "  + $entryName" -ForegroundColor DarkGray
+    $entryName = $file.Replace([System.IO.Path]::DirectorySeparatorChar, [char]0x2F)
+
+    # Convert CRLF to LF for shell scripts (Android requires Unix line endings)
+    if ($shellScripts -contains (Split-Path $file -Leaf)) {
+        $content = [System.IO.File]::ReadAllText($fullPath) -replace "`r`n", "`n"
+        $entry = $zip.CreateEntry($entryName, [System.IO.Compression.CompressionLevel]::Optimal)
+        $stream = $entry.Open()
+        $bytes = [System.Text.Encoding]::UTF8.GetBytes($content)
+        $stream.Write($bytes, 0, $bytes.Length)
+        $stream.Close()
+        Write-Host "  + $entryName (LF converted)" -ForegroundColor DarkCyan
+    } else {
+        [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile(
+            $zip, $fullPath, $entryName, [System.IO.Compression.CompressionLevel]::Optimal
+        ) | Out-Null
+        Write-Host "  + $entryName" -ForegroundColor DarkGray
+    }
 }
 
 $zip.Dispose()

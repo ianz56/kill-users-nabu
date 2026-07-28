@@ -1,0 +1,8 @@
+# Force Unix line endings for all shell scripts
+*.sh text eol=lf
+
+# Force Unix line endings for XML configs deployed to Android
+*.xml text eol=lf
+
+# Keep Windows line endings for PowerShell build script
+*.ps1 text eol=crlf

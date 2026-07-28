@@ -1,7 +1,6 @@
-id=kill-users-on-switch
-name=Kill Users on Switch
-version=v1.0.8
-versionCode=9
+id=nabu-cn-familylink-helper
+name=Nabu CN System & Family Link Helper
+version=v1.0.9
+versionCode=10
 author=Ian Perdiansah
 description=Stop background users, enable GMS/GSF on CN ROM, configure Family Link & Supervision as system privileged apps with complete default-permissions XML, enforce overlay & autostart AppOps, and lock refresh-rate.
-
