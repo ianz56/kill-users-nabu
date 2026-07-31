@@ -118,13 +118,21 @@ enforce_familylink_permissions() {
   USERS=$(pm list users 2>/dev/null | grep 'UserInfo{' | sed -n 's/.*UserInfo{\([0-9]*\):.*/\1/p')
   [ -z "$USERS" ] && USERS="0 11"
 
+  # Whitelist services from Doze / Battery Optimization
+  dumpsys deviceidle whitelist +com.google.android.gms.supervision >/dev/null 2>&1
+  dumpsys deviceidle whitelist +com.google.android.apps.kids.familylinkhelper >/dev/null 2>&1
+  dumpsys deviceidle whitelist +com.google.android.gms >/dev/null 2>&1
+  dumpsys deviceidle whitelist +com.android.vending >/dev/null 2>&1
+
   for u in $USERS; do
-    for pkg in com.google.android.apps.kids.familylink com.google.android.apps.kids.familylinkhelper com.google.android.gms.supervision com.google.android.gms; do
+    for pkg in com.google.android.apps.kids.familylink com.google.android.apps.kids.familylinkhelper com.google.android.gms.supervision com.google.android.gms com.android.vending; do
       if pm list packages --user "$u" 2>/dev/null | grep -q "$pkg"; then
         for perm in \
           android.permission.SYSTEM_ALERT_WINDOW \
           android.permission.PACKAGE_USAGE_STATS \
           android.permission.GET_USAGE_STATS \
+          android.permission.OBSERVE_APP_USAGE \
+          android.permission.CHANGE_APP_IDLE_STATE \
           android.permission.SYSTEM_APPLICATION_OVERLAY \
           android.permission.SCHEDULE_EXACT_ALARM \
           android.permission.POST_NOTIFICATIONS \
@@ -136,7 +144,13 @@ enforce_familylink_permissions() {
           android.permission.READ_PHONE_STATE \
           android.permission.INTERACT_ACROSS_USERS \
           android.permission.MANAGE_USERS \
-          android.permission.WRITE_SECURE_SETTINGS; do
+          android.permission.WRITE_SECURE_SETTINGS \
+          android.permission.INSTALL_PACKAGES \
+          android.permission.DELETE_PACKAGES \
+          android.permission.REQUEST_INSTALL_PACKAGES \
+          android.permission.MANAGE_EXTERNAL_STORAGE \
+          android.permission.WRITE_EXTERNAL_STORAGE \
+          android.permission.READ_EXTERNAL_STORAGE; do
             pm grant --user "$u" "$pkg" "$perm" >/dev/null 2>&1
         done
 
@@ -144,6 +158,13 @@ enforce_familylink_permissions() {
         appops set --user "$u" "$pkg" GET_USAGE_STATS allow >/dev/null 2>&1
         appops set --user "$u" "$pkg" USE_FULL_SCREEN_INTENT allow >/dev/null 2>&1
         appops set --user "$u" "$pkg" ACCESS_RESTRICTED_SETTINGS allow >/dev/null 2>&1
+        appops set --user "$u" "$pkg" REQUEST_INSTALL_PACKAGES allow >/dev/null 2>&1
+        appops set --user "$u" "$pkg" MANAGE_EXTERNAL_STORAGE allow >/dev/null 2>&1
+        appops set --user "$u" "$pkg" 66 allow >/dev/null 2>&1
+        appops set --user "$u" "$pkg" 92 allow >/dev/null 2>&1
+        appops set --user "$u" "$pkg" 98 allow >/dev/null 2>&1
+        appops set --user "$u" "$pkg" 99 allow >/dev/null 2>&1
+        appops set --user "$u" "$pkg" 100 allow >/dev/null 2>&1
         appops set --user "$u" "$pkg" 10008 allow >/dev/null 2>&1
         appops set --user "$u" "$pkg" 10021 allow >/dev/null 2>&1
         appops set --user "$u" "$pkg" 10022 allow >/dev/null 2>&1
