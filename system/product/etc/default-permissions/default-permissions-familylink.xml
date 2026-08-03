@@ -41,4 +41,13 @@
     <permission name="android.permission.OBSERVE_APP_USAGE" fixed="true"/>
     <permission name="android.permission.CHANGE_APP_IDLE_STATE" fixed="true"/>
   </exception>
+
+  <exception package="com.google.android.packageinstaller">
+    <permission name="android.permission.POST_NOTIFICATIONS" fixed="true"/>
+    <permission name="android.permission.PACKAGE_USAGE_STATS" fixed="true"/>
+    <permission name="android.permission.INSTALL_PACKAGES" fixed="true"/>
+    <permission name="android.permission.DELETE_PACKAGES" fixed="true"/>
+    <permission name="android.permission.REQUEST_INSTALL_PACKAGES" fixed="true"/>
+    <permission name="android.permission.MANAGE_EXTERNAL_STORAGE" fixed="true"/>
+  </exception>
 </exceptions>

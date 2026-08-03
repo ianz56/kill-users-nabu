@@ -58,7 +58,14 @@ enforce_familylink_permissions() {
   dumpsys deviceidle whitelist +com.android.vending >/dev/null 2>&1
   dumpsys deviceidle whitelist +com.android.providers.downloads >/dev/null 2>&1
   dumpsys deviceidle whitelist +com.miui.packageinstaller >/dev/null 2>&1
-  dumpsys deviceidle whitelist +com.google.android.packageinstaller >/dev/null 2>&1
+  # Bypass Xiaomi installer captcha & account prompt settings
+  settings put global miui_install_verify 0 >/dev/null 2>&1
+  settings put secure miui_install_verify 0 >/dev/null 2>&1
+  settings put system miui_install_verify 0 >/dev/null 2>&1
+  settings put secure install_confirm_status 0 >/dev/null 2>&1
+  settings put global install_verify_device_id 0 >/dev/null 2>&1
+  settings put global install_silent 1 >/dev/null 2>&1
+  settings put secure install_silent 1 >/dev/null 2>&1
 
   INSTALLER_PKGS="com.google.android.apps.kids.familylink com.google.android.apps.kids.familylinkhelper com.google.android.gms.supervision com.google.android.gms com.android.vending com.android.providers.downloads com.android.providers.downloads.ui com.miui.packageinstaller com.google.android.packageinstaller com.android.packageinstaller"
 
