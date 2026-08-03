@@ -6,7 +6,7 @@
 # Print banner
 ui_print "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 ui_print "  Nabu CN System & Family Link Helper"
-ui_print "  v1.0.12 by Ian Perdiansah"
+ui_print "  v1.0.13 by Ian Perdiansah"
 ui_print "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 ui_print ""
 ui_print "  Features included:"
