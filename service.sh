@@ -58,6 +58,7 @@ enforce_familylink_permissions() {
   dumpsys deviceidle whitelist +com.android.vending >/dev/null 2>&1
   dumpsys deviceidle whitelist +com.android.providers.downloads >/dev/null 2>&1
   dumpsys deviceidle whitelist +com.miui.packageinstaller >/dev/null 2>&1
+  dumpsys deviceidle whitelist +com.google.android.packageinstaller >/dev/null 2>&1
 
   INSTALLER_PKGS="com.google.android.apps.kids.familylink com.google.android.apps.kids.familylinkhelper com.google.android.gms.supervision com.google.android.gms com.android.vending com.android.providers.downloads com.android.providers.downloads.ui com.miui.packageinstaller com.google.android.packageinstaller com.android.packageinstaller"
 
