@@ -123,9 +123,13 @@ enforce_familylink_permissions() {
   dumpsys deviceidle whitelist +com.google.android.apps.kids.familylinkhelper >/dev/null 2>&1
   dumpsys deviceidle whitelist +com.google.android.gms >/dev/null 2>&1
   dumpsys deviceidle whitelist +com.android.vending >/dev/null 2>&1
+  dumpsys deviceidle whitelist +com.android.providers.downloads >/dev/null 2>&1
+  dumpsys deviceidle whitelist +com.miui.packageinstaller >/dev/null 2>&1
+
+  INSTALLER_PKGS="com.google.android.apps.kids.familylink com.google.android.apps.kids.familylinkhelper com.google.android.gms.supervision com.google.android.gms com.android.vending com.android.providers.downloads com.android.providers.downloads.ui com.miui.packageinstaller com.google.android.packageinstaller com.android.packageinstaller"
 
   for u in $USERS; do
-    for pkg in com.google.android.apps.kids.familylink com.google.android.apps.kids.familylinkhelper com.google.android.gms.supervision com.google.android.gms com.android.vending; do
+    for pkg in $INSTALLER_PKGS; do
       if pm list packages --user "$u" 2>/dev/null | grep -q "$pkg"; then
         for perm in \
           android.permission.SYSTEM_ALERT_WINDOW \
@@ -160,6 +164,9 @@ enforce_familylink_permissions() {
         appops set --user "$u" "$pkg" ACCESS_RESTRICTED_SETTINGS allow >/dev/null 2>&1
         appops set --user "$u" "$pkg" REQUEST_INSTALL_PACKAGES allow >/dev/null 2>&1
         appops set --user "$u" "$pkg" MANAGE_EXTERNAL_STORAGE allow >/dev/null 2>&1
+        appops set --user "$u" "$pkg" WRITE_MEDIA_AUDIO allow >/dev/null 2>&1
+        appops set --user "$u" "$pkg" WRITE_MEDIA_VIDEO allow >/dev/null 2>&1
+        appops set --user "$u" "$pkg" WRITE_MEDIA_IMAGES allow >/dev/null 2>&1
         appops set --user "$u" "$pkg" 66 allow >/dev/null 2>&1
         appops set --user "$u" "$pkg" 92 allow >/dev/null 2>&1
         appops set --user "$u" "$pkg" 98 allow >/dev/null 2>&1
