@@ -79,6 +79,11 @@ enforce_familylink_permissions() {
           android.permission.WRITE_CONTACTS \
           android.permission.ACCESS_FINE_LOCATION \
           android.permission.ACCESS_COARSE_LOCATION \
+          android.permission.ACCESS_BACKGROUND_LOCATION \
+          android.permission.BLUETOOTH_ADVERTISE \
+          android.permission.BLUETOOTH_CONNECT \
+          android.permission.BLUETOOTH_SCAN \
+          android.permission.NEARBY_WIFI_DEVICES \
           android.permission.READ_PHONE_STATE \
           android.permission.INTERACT_ACROSS_USERS \
           android.permission.MANAGE_USERS \
@@ -94,6 +99,12 @@ enforce_familylink_permissions() {
 
         appops set --user "$u" "$pkg" SYSTEM_ALERT_WINDOW allow >/dev/null 2>&1
         appops set --user "$u" "$pkg" GET_USAGE_STATS allow >/dev/null 2>&1
+        appops set --user "$u" "$pkg" FINE_LOCATION allow >/dev/null 2>&1
+        appops set --user "$u" "$pkg" COARSE_LOCATION allow >/dev/null 2>&1
+        appops set --user "$u" "$pkg" BLUETOOTH_ADVERTISE allow >/dev/null 2>&1
+        appops set --user "$u" "$pkg" BLUETOOTH_CONNECT allow >/dev/null 2>&1
+        appops set --user "$u" "$pkg" BLUETOOTH_SCAN allow >/dev/null 2>&1
+        appops set --user "$u" "$pkg" NEARBY_WIFI_DEVICES allow >/dev/null 2>&1
         appops set --user "$u" "$pkg" USE_FULL_SCREEN_INTENT allow >/dev/null 2>&1
         appops set --user "$u" "$pkg" ACCESS_RESTRICTED_SETTINGS allow >/dev/null 2>&1
         appops set --user "$u" "$pkg" REQUEST_INSTALL_PACKAGES allow >/dev/null 2>&1
