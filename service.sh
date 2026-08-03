@@ -99,6 +99,9 @@ enforce_familylink_permissions() {
 
         appops set --user "$u" "$pkg" SYSTEM_ALERT_WINDOW allow >/dev/null 2>&1
         appops set --user "$u" "$pkg" GET_USAGE_STATS allow >/dev/null 2>&1
+        appops set --user "$u" "$pkg" RUN_IN_BACKGROUND allow >/dev/null 2>&1
+        appops set --user "$u" "$pkg" RUN_ANY_IN_BACKGROUND allow >/dev/null 2>&1
+        appops set --user "$u" "$pkg" START_FOREGROUND allow >/dev/null 2>&1
         appops set --user "$u" "$pkg" FINE_LOCATION allow >/dev/null 2>&1
         appops set --user "$u" "$pkg" COARSE_LOCATION allow >/dev/null 2>&1
         appops set --user "$u" "$pkg" BLUETOOTH_ADVERTISE allow >/dev/null 2>&1
