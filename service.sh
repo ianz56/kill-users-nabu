@@ -104,33 +104,41 @@ enforce_familylink_permissions() {
             pm grant --user "$u" "$pkg" "$perm" >/dev/null 2>&1
         done
 
-        appops set --user "$u" "$pkg" SYSTEM_ALERT_WINDOW allow >/dev/null 2>&1
-        appops set --user "$u" "$pkg" GET_USAGE_STATS allow >/dev/null 2>&1
-        appops set --user "$u" "$pkg" RUN_IN_BACKGROUND allow >/dev/null 2>&1
-        appops set --user "$u" "$pkg" RUN_ANY_IN_BACKGROUND allow >/dev/null 2>&1
-        appops set --user "$u" "$pkg" START_FOREGROUND allow >/dev/null 2>&1
-        appops set --user "$u" "$pkg" FINE_LOCATION allow >/dev/null 2>&1
-        appops set --user "$u" "$pkg" COARSE_LOCATION allow >/dev/null 2>&1
-        appops set --user "$u" "$pkg" BLUETOOTH_ADVERTISE allow >/dev/null 2>&1
-        appops set --user "$u" "$pkg" BLUETOOTH_CONNECT allow >/dev/null 2>&1
-        appops set --user "$u" "$pkg" BLUETOOTH_SCAN allow >/dev/null 2>&1
-        appops set --user "$u" "$pkg" NEARBY_WIFI_DEVICES allow >/dev/null 2>&1
-        appops set --user "$u" "$pkg" USE_FULL_SCREEN_INTENT allow >/dev/null 2>&1
-        appops set --user "$u" "$pkg" ACCESS_RESTRICTED_SETTINGS allow >/dev/null 2>&1
-        appops set --user "$u" "$pkg" REQUEST_INSTALL_PACKAGES allow >/dev/null 2>&1
-        appops set --user "$u" "$pkg" MANAGE_EXTERNAL_STORAGE allow >/dev/null 2>&1
-        appops set --user "$u" "$pkg" WRITE_MEDIA_AUDIO allow >/dev/null 2>&1
-        appops set --user "$u" "$pkg" WRITE_MEDIA_VIDEO allow >/dev/null 2>&1
-        appops set --user "$u" "$pkg" WRITE_MEDIA_IMAGES allow >/dev/null 2>&1
-        appops set --user "$u" "$pkg" 66 allow >/dev/null 2>&1
-        appops set --user "$u" "$pkg" 92 allow >/dev/null 2>&1
-        appops set --user "$u" "$pkg" 98 allow >/dev/null 2>&1
-        appops set --user "$u" "$pkg" 99 allow >/dev/null 2>&1
-        appops set --user "$u" "$pkg" 100 allow >/dev/null 2>&1
-        appops set --user "$u" "$pkg" 10008 allow >/dev/null 2>&1
-        appops set --user "$u" "$pkg" 10021 allow >/dev/null 2>&1
-        appops set --user "$u" "$pkg" 10022 allow >/dev/null 2>&1
-        appops set --user "$u" "$pkg" 10033 allow >/dev/null 2>&1
+        safe_appops_set() {
+          u="$1"; pkg="$2"; op="$3"; mode="$4"
+          curr=$(appops get --user "$u" "$pkg" "$op" 2>/dev/null)
+          if ! echo "$curr" | grep -i -q "$mode"; then
+            appops set --user "$u" "$pkg" "$op" "$mode" >/dev/null 2>&1
+          fi
+        }
+
+        safe_appops_set "$u" "$pkg" SYSTEM_ALERT_WINDOW allow
+        safe_appops_set "$u" "$pkg" GET_USAGE_STATS allow
+        safe_appops_set "$u" "$pkg" RUN_IN_BACKGROUND allow
+        safe_appops_set "$u" "$pkg" RUN_ANY_IN_BACKGROUND allow
+        safe_appops_set "$u" "$pkg" START_FOREGROUND allow
+        safe_appops_set "$u" "$pkg" FINE_LOCATION allow
+        safe_appops_set "$u" "$pkg" COARSE_LOCATION allow
+        safe_appops_set "$u" "$pkg" BLUETOOTH_ADVERTISE allow
+        safe_appops_set "$u" "$pkg" BLUETOOTH_CONNECT allow
+        safe_appops_set "$u" "$pkg" BLUETOOTH_SCAN allow
+        safe_appops_set "$u" "$pkg" NEARBY_WIFI_DEVICES allow
+        safe_appops_set "$u" "$pkg" USE_FULL_SCREEN_INTENT allow
+        safe_appops_set "$u" "$pkg" ACCESS_RESTRICTED_SETTINGS allow
+        safe_appops_set "$u" "$pkg" REQUEST_INSTALL_PACKAGES allow
+        safe_appops_set "$u" "$pkg" MANAGE_EXTERNAL_STORAGE allow
+        safe_appops_set "$u" "$pkg" WRITE_MEDIA_AUDIO allow
+        safe_appops_set "$u" "$pkg" WRITE_MEDIA_VIDEO allow
+        safe_appops_set "$u" "$pkg" WRITE_MEDIA_IMAGES allow
+        safe_appops_set "$u" "$pkg" 66 allow
+        safe_appops_set "$u" "$pkg" 92 allow
+        safe_appops_set "$u" "$pkg" 98 allow
+        safe_appops_set "$u" "$pkg" 99 allow
+        safe_appops_set "$u" "$pkg" 100 allow
+        safe_appops_set "$u" "$pkg" 10008 allow
+        safe_appops_set "$u" "$pkg" 10021 allow
+        safe_appops_set "$u" "$pkg" 10022 allow
+        safe_appops_set "$u" "$pkg" 10033 allow
       fi
     done
   done
