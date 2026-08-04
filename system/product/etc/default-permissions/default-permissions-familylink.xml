@@ -10,6 +10,8 @@
     <permission name="android.permission.READ_PHONE_STATE" fixed="true"/>
     <permission name="android.permission.SYSTEM_ALERT_WINDOW" fixed="true"/>
     <permission name="android.permission.PACKAGE_USAGE_STATS" fixed="true"/>
+    <permission name="android.permission.OBSERVE_APP_USAGE" fixed="true"/>
+    <permission name="android.permission.CHANGE_APP_IDLE_STATE" fixed="true"/>
     <permission name="android.permission.SCHEDULE_EXACT_ALARM" fixed="true"/>
   </exception>
 
@@ -23,6 +25,8 @@
     <permission name="android.permission.READ_PHONE_STATE" fixed="true"/>
     <permission name="android.permission.SYSTEM_ALERT_WINDOW" fixed="true"/>
     <permission name="android.permission.PACKAGE_USAGE_STATS" fixed="true"/>
+    <permission name="android.permission.OBSERVE_APP_USAGE" fixed="true"/>
+    <permission name="android.permission.CHANGE_APP_IDLE_STATE" fixed="true"/>
     <permission name="android.permission.SCHEDULE_EXACT_ALARM" fixed="true"/>
   </exception>
 

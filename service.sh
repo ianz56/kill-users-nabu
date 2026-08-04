@@ -58,6 +58,8 @@ enforce_familylink_permissions() {
   dumpsys deviceidle whitelist +com.android.vending >/dev/null 2>&1
   dumpsys deviceidle whitelist +com.android.providers.downloads >/dev/null 2>&1
   dumpsys deviceidle whitelist +com.miui.packageinstaller >/dev/null 2>&1
+  # Purge any user-space app update for Supervision so it always runs as privileged system app
+  rm -rf /data/app/*supervision* /data/app/*/*supervision* >/dev/null 2>&1
   # Bypass Xiaomi installer captcha & account prompt settings
   settings put global miui_install_verify 0 >/dev/null 2>&1
   settings put secure miui_install_verify 0 >/dev/null 2>&1
