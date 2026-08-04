@@ -10,7 +10,7 @@ import sys
 import zipfile
 
 MODULE_NAME = "nabu-cn-familylink-helper"
-VERSION = "v1.0.28"
+VERSION = "v1.0.29"
 
 # Extensions that need CRLF -> LF conversion for Android
 SHELL_EXTENSIONS = {".sh"}

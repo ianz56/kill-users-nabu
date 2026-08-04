@@ -206,6 +206,7 @@ EOF
           com.google.android.providers.gsf.permission.READ_GSERVICES \
           android.permission.WRITE_SETTINGS \
           android.permission.SYSTEM_APPLICATION_OVERLAY \
+          android.permission.USE_FULL_SCREEN_INTENT \
           android.permission.SCHEDULE_EXACT_ALARM \
           android.permission.POST_NOTIFICATIONS \
           android.permission.GET_ACCOUNTS \
@@ -242,6 +243,9 @@ EOF
         safe_appops_set "$u" "$pkg" SYSTEM_ALERT_WINDOW allow
         safe_appops_set "$u" "$pkg" GET_USAGE_STATS allow
         safe_appops_set "$u" "$pkg" WRITE_SETTINGS allow
+        safe_appops_set "$u" "$pkg" USE_FULL_SCREEN_INTENT allow
+        safe_appops_set "$u" "$pkg" SCHEDULE_EXACT_ALARM allow
+        safe_appops_set "$u" "$pkg" 133 allow
         safe_appops_set "$u" "$pkg" RUN_IN_BACKGROUND allow
         safe_appops_set "$u" "$pkg" RUN_ANY_IN_BACKGROUND allow
         safe_appops_set "$u" "$pkg" START_FOREGROUND allow
