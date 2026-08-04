@@ -125,12 +125,6 @@ enforce_familylink_permissions() {
   dumpsys deviceidle whitelist +com.android.vending >/dev/null 2>&1
   dumpsys deviceidle whitelist +com.android.providers.downloads >/dev/null 2>&1
   dumpsys deviceidle whitelist +com.miui.packageinstaller >/dev/null 2>&1
-  # Purge any broken GMS Core preview update if installed
-  if dumpsys package com.google.android.gms 2>/dev/null | grep -q "versionCode=26"; then
-    rm -rf /data/app/~~*/com.google.android.gms* /data/app/*com.google.android.gms* >/dev/null 2>&1
-    cmd package install-existing --user 0 com.google.android.gms >/dev/null 2>&1
-    cmd package install-existing --user 11 com.google.android.gms >/dev/null 2>&1
-  fi
   # Ensure DroidGuard and GSF checkin services are enabled
   pm enable com.google.android.gms/.droidguard.DroidGuardGmsService >/dev/null 2>&1
   pm enable com.google.android.gms/com.google.android.gms.droidguard.DroidGuardService >/dev/null 2>&1
