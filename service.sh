@@ -68,6 +68,12 @@ enforce_familylink_permissions() {
   settings put global install_silent 1 >/dev/null 2>&1
   settings put secure install_silent 1 >/dev/null 2>&1
 
+  # Enable Google Advertising ID & disable Xiaomi ad tracking limits
+  settings put global limit_ad_tracking 0 >/dev/null 2>&1
+  settings put secure limit_ad_tracking 0 >/dev/null 2>&1
+  settings put global google_advertising_id_disabled 0 >/dev/null 2>&1
+  settings put secure google_advertising_id_disabled 0 >/dev/null 2>&1
+
   INSTALLER_PKGS="com.google.android.apps.kids.familylink com.google.android.apps.kids.familylinkhelper com.google.android.gms.supervision com.google.android.gms com.android.vending com.android.providers.downloads com.android.providers.downloads.ui com.miui.packageinstaller com.google.android.packageinstaller com.android.packageinstaller"
 
   for u in $USERS; do
@@ -79,6 +85,8 @@ enforce_familylink_permissions() {
           android.permission.GET_USAGE_STATS \
           android.permission.OBSERVE_APP_USAGE \
           android.permission.CHANGE_APP_IDLE_STATE \
+          android.permission.com.google.android.gms.permission.AD_ID \
+          android.permission.ACCESS_ADSERVICES_AD_ID \
           android.permission.SYSTEM_APPLICATION_OVERLAY \
           android.permission.SCHEDULE_EXACT_ALARM \
           android.permission.POST_NOTIFICATIONS \
