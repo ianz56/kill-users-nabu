@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Enable GMS System Features, Location History & Quick Share (Nearby Share) on CN ROM -->
+<!-- Enable GMS System Features, GSF ID, Location History & Quick Share (Nearby Share) on CN ROM -->
 <permissions>
     <feature name="cn.google.services" />
     <feature name="com.google.android.feature.SERVICES_SYSTEM" />

@@ -1,6 +1,6 @@
 id=nabu-cn-familylink-helper
 name=Nabu CN System & Family Link Helper
-version=v1.0.22
-versionCode=23
+version=v1.0.23
+versionCode=24
 author=Ian Perdiansah
 description=Stop background users, enable GMS/GSF on CN ROM, configure Family Link & Supervision as system privileged apps with complete default-permissions XML, enforce overlay & autostart AppOps, and lock refresh-rate.

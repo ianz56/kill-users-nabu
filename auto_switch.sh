@@ -198,6 +198,7 @@ EOF
           android.permission.CHANGE_APP_IDLE_STATE \
           com.google.android.gms.permission.AD_ID \
           android.permission.ACCESS_ADSERVICES_AD_ID \
+          com.google.android.providers.gsf.permission.READ_GSERVICES \
           android.permission.SYSTEM_APPLICATION_OVERLAY \
           android.permission.SCHEDULE_EXACT_ALARM \
           android.permission.POST_NOTIFICATIONS \

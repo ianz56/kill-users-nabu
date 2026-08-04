@@ -1,8 +1,13 @@
-# Support GMS Core, Location Features & Advertising ID for Xiaomi CN ROM
+# Support GMS Core, GSF ID, Location Features & Advertising ID for Xiaomi CN ROM
 ro.miui.support_gms=1
 persist.sys.miui.google.enable=1
 ro.com.google.locationfeatures=1
 persist.sys.gms.location_history=1
-ro.com.google.clientidbase=android-xiaomi
+ro.com.google.clientidbase=android-google
+ro.com.google.clientidbase.ms=android-google
+ro.com.google.clientidbase.am=android-google
+ro.com.google.clientidbase.gmm=android-google
+ro.com.google.clientidbase.yt=android-google
+ro.com.google.gmsversion=24.16.16
 persist.sys.miui_ad_id_enable=1
 ro.com.google.gms.ad_id=1
