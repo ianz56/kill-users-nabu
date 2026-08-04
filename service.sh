@@ -74,6 +74,50 @@ enforce_familylink_permissions() {
   settings put global google_advertising_id_disabled 0 >/dev/null 2>&1
   settings put secure google_advertising_id_disabled 0 >/dev/null 2>&1
 
+  for u in $USERS; do
+    settings put --user "$u" global limit_ad_tracking 0 >/dev/null 2>&1
+    settings put --user "$u" secure limit_ad_tracking 0 >/dev/null 2>&1
+    settings put --user "$u" global google_advertising_id_disabled 0 >/dev/null 2>&1
+    settings put --user "$u" secure google_advertising_id_disabled 0 >/dev/null 2>&1
+  done
+
+  # Generate persistent ad_id.xml for User 0 and User 11 if missing
+  if [ -d "/data/data/com.google.android.gms" ]; then
+    mkdir -p "/data/data/com.google.android.gms/shared_prefs" >/dev/null 2>&1
+    if [ ! -f "/data/data/com.google.android.gms/shared_prefs/ad_id.xml" ]; then
+      cat << 'EOF' > "/data/data/com.google.android.gms/shared_prefs/ad_id.xml"
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<map>
+    <string name="adid_key">e4d5f6a7-8b9c-4d1e-9f3a-4b5c6d7e8f9a</string>
+    <boolean name="enable_limit_ad_tracking" value="false" />
+    <boolean name="zero_advertising_id" value="false" />
+    <boolean name="adid_settings_migrated" value="true" />
+</map>
+EOF
+      uid_0=$(stat -c '%u:%g' /data/data/com.google.android.gms 2>/dev/null || echo "10028:10028")
+      chmod 660 "/data/data/com.google.android.gms/shared_prefs/ad_id.xml" >/dev/null 2>&1
+      chown $uid_0 "/data/data/com.google.android.gms/shared_prefs/ad_id.xml" >/dev/null 2>&1
+    fi
+  fi
+
+  if [ -d "/data/user/11/com.google.android.gms" ]; then
+    mkdir -p "/data/user/11/com.google.android.gms/shared_prefs" >/dev/null 2>&1
+    if [ ! -f "/data/user/11/com.google.android.gms/shared_prefs/ad_id.xml" ]; then
+      cat << 'EOF' > "/data/user/11/com.google.android.gms/shared_prefs/ad_id.xml"
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<map>
+    <string name="adid_key">e4d5f6a7-8b9c-4d1e-9f3a-4b5c6d7e8f9a</string>
+    <boolean name="enable_limit_ad_tracking" value="false" />
+    <boolean name="zero_advertising_id" value="false" />
+    <boolean name="adid_settings_migrated" value="true" />
+</map>
+EOF
+      uid_11=$(stat -c '%u:%g' /data/user/11/com.google.android.gms 2>/dev/null || echo "1110028:1110028")
+      chmod 660 "/data/user/11/com.google.android.gms/shared_prefs/ad_id.xml" >/dev/null 2>&1
+      chown $uid_11 "/data/user/11/com.google.android.gms/shared_prefs/ad_id.xml" >/dev/null 2>&1
+    fi
+  fi
+
   INSTALLER_PKGS="com.google.android.apps.kids.familylink com.google.android.apps.kids.familylinkhelper com.google.android.gms.supervision com.google.android.gms com.android.vending com.android.providers.downloads com.android.providers.downloads.ui com.miui.packageinstaller com.google.android.packageinstaller com.android.packageinstaller"
 
   for u in $USERS; do
