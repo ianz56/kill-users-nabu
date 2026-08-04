@@ -58,7 +58,12 @@ enforce_familylink_permissions() {
   dumpsys deviceidle whitelist +com.android.vending >/dev/null 2>&1
   dumpsys deviceidle whitelist +com.android.providers.downloads >/dev/null 2>&1
   dumpsys deviceidle whitelist +com.miui.packageinstaller >/dev/null 2>&1
-  # Allow Play Store auto-updates for Supervision while maintaining root permission grants
+  # Purge any broken GMS Core preview update if installed
+  if dumpsys package com.google.android.gms 2>/dev/null | grep -q "versionCode=26"; then
+    rm -rf /data/app/~~*/com.google.android.gms* /data/app/*com.google.android.gms* >/dev/null 2>&1
+    cmd package install-existing --user 0 com.google.android.gms >/dev/null 2>&1
+    cmd package install-existing --user 11 com.google.android.gms >/dev/null 2>&1
+  fi
   # Bypass Xiaomi installer captcha & account prompt settings
   settings put global miui_install_verify 0 >/dev/null 2>&1
   settings put secure miui_install_verify 0 >/dev/null 2>&1
