@@ -137,24 +137,6 @@ enforce_familylink_permissions() {
   pm enable com.google.android.gms/com.google.android.gms.checkin.CheckinService >/dev/null 2>&1
   pm enable com.google.android.gsf >/dev/null 2>&1
 
-  # Ensure GSF ID and GServices parameters exist in gservices.db
-  for gsf_dir in /data/data/com.google.android.gsf/databases /data/data/com.google.android.gms/databases /data/user/11/com.google.android.gsf/databases /data/user/11/com.google.android.gms/databases; do
-    if [ -d "$(dirname "$gsf_dir")" ]; then
-      mkdir -p "$gsf_dir" >/dev/null 2>&1
-      sqlite3 "$gsf_dir/gservices.db" "CREATE TABLE IF NOT EXISTS main (_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE, value TEXT);" >/dev/null 2>&1
-      sqlite3 "$gsf_dir/gservices.db" "CREATE TABLE IF NOT EXISTS overrides (_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE, value TEXT);" >/dev/null 2>&1
-      sqlite3 "$gsf_dir/gservices.db" "INSERT OR REPLACE INTO main (name, value) VALUES ('android_id', '3a9f8b7c6d5e4f1a');" >/dev/null 2>&1
-      sqlite3 "$gsf_dir/gservices.db" "INSERT OR REPLACE INTO overrides (name, value) VALUES ('android_id', '3a9f8b7c6d5e4f1a');" >/dev/null 2>&1
-      sqlite3 "$gsf_dir/gservices.db" "INSERT OR REPLACE INTO main (name, value) VALUES ('gads:idless', 'false');" >/dev/null 2>&1
-      sqlite3 "$gsf_dir/gservices.db" "INSERT OR REPLACE INTO overrides (name, value) VALUES ('gads:idless', 'false');" >/dev/null 2>&1
-      pkg_owner=$(stat -c '%u:%g' "$(dirname "$gsf_dir")" 2>/dev/null)
-      if [ -n "$pkg_owner" ]; then
-        chown -R "$pkg_owner" "$gsf_dir" >/dev/null 2>&1
-        chmod 660 "$gsf_dir/gservices.db" >/dev/null 2>&1
-      fi
-    fi
-  done
-
   # Bypass Xiaomi installer captcha & account prompt settings
   settings put global miui_install_verify 0 >/dev/null 2>&1
   settings put secure miui_install_verify 0 >/dev/null 2>&1
