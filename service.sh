@@ -137,6 +137,7 @@ EOF
           com.google.android.gms.permission.AD_ID \
           android.permission.ACCESS_ADSERVICES_AD_ID \
           com.google.android.providers.gsf.permission.READ_GSERVICES \
+          android.permission.WRITE_SETTINGS \
           android.permission.SYSTEM_APPLICATION_OVERLAY \
           android.permission.SCHEDULE_EXACT_ALARM \
           android.permission.POST_NOTIFICATIONS \
@@ -171,8 +172,9 @@ EOF
           fi
         }
 
-        safe_appops_set "$u" "$pkg" SYSTEM_ALERT_WINDOW allow
-        safe_appops_set "$u" "$pkg" GET_USAGE_STATS allow
+        appops set --user "$u" "$pkg" SYSTEM_ALERT_WINDOW allow >/dev/null 2>&1
+        appops set --user "$u" "$pkg" PACKAGE_USAGE_STATS allow >/dev/null 2>&1
+        appops set --user "$u" "$pkg" WRITE_SETTINGS allow >/dev/null 2>&1
         safe_appops_set "$u" "$pkg" RUN_IN_BACKGROUND allow
         safe_appops_set "$u" "$pkg" RUN_ANY_IN_BACKGROUND allow
         safe_appops_set "$u" "$pkg" START_FOREGROUND allow
