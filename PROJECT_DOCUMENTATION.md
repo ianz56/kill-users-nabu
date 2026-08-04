@@ -3,7 +3,7 @@
 **Nama Perangkat:** Xiaomi Pad 5 (Codename: `nabu`)  
 **Versi ROM:** Xiaomi HyperOS / MIUI China ROM (`WNSCNXM`, Android 14 / SDK 34)  
 **Versi Modul Terakhir:** `v1.0.30` (VersionCode: `31`)  
-**Repository GitHub:** `https://github.com/ianz56/kill-users-nabu.git`  
+**Repository GitHub:** `https://github.com/ianz56/nabu-cn-familylink-helper.git`  
 **Lokasi Kode Lokal:** `C:\Users\ianpe\kill-users-nabu`  
 
 ---
