@@ -21,3 +21,9 @@ ro.boot.warranty_bit=0
 ro.warranty_bit=0
 ro.is_ever_orange=0
 
+# Disable MIUI Security Package Verifier & Enable Full Play Store Split Installation
+ro.miui.secure_install=0
+persist.sys.miui.install_verify=0
+persist.sys.package_verifier_enable=0
+persist.sys.upload_apk_enable=0
+

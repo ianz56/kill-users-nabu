@@ -81,7 +81,10 @@ Berikut ringkasan kronologis perbaikan dari awal hingga versi terbaru:
 
 ### 🔹 v1.0.32 (Fix Split Install / Dynamic Feature Loop TikTok & Games)
 - **Fix Dynamic Feature Download Loop (`SplitInstallService` Stuck 194/PENDING)**: Menambahkan izin privilese sistem `UPDATE_PACKAGES_WITHOUT_USER_ACTION`, `INSTALL_DYNAMIC_SYSTEM`, `MANAGE_APP_OPS_MODES`, `LOADER_USAGE_STATS`, dan `UPDATE_APP_OPS_STATS` ke `privapp-permissions-vending.xml` & `default-permissions-familylink.xml`.
-- **Auto-Grant Split Installation**: Memastikan Play Store dapat mengunduh dan menyuntikkan APK modul tambahan / fitur dinamis (seperti fitur TikTok, resource game, dll.) secara *silent background* tanpa tertahan status *pending* di MIUI.
+
+### 🔹 v1.0.34 (Fix Sistemik Universal MIUI Installer Block & APK Upload Verifier)
+- **Permanent Universal Disabling MIUI Package Verifier**: Menambahkan properti sistem `ro.miui.secure_install=0`, `persist.sys.miui.install_verify=0`, `persist.sys.package_verifier_enable=0`, dan `persist.sys.upload_apk_enable=0` di `system.prop`, `service.sh`, dan `auto_switch.sh`.
+- **Menghilangkan Verifikasi Sampel APK MIUI**: Mematikan fitur `upload_apk_enable` milik Xiaomi Security Daemon yang menghadang dan membuat `SplitInstallService` Play Store tertahan di status `legacy_status_code=190/194` saat mengunduh split APK untuk aplikasi apapun (TikTok, Games, dll.).
 
 ---
 
