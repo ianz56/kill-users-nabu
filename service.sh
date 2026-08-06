@@ -53,7 +53,7 @@ PRODUCT_BRAND=$(getprop ro.product.brand 2>/dev/null || echo "Xiaomi")
 PRODUCT_DEVICE=$(getprop ro.product.device 2>/dev/null || echo "nabu")
 
 if [ "$PRODUCT_DEVICE" = "nabu" ]; then
-  # Universal Xiaomi Pad 5 Global certified fingerprint spoofing for all nabu builds
+  # Universal Xiaomi Pad 5 Global certified fingerprint & version spoofing for all nabu builds
   FINGERPRINT="Xiaomi/nabu_global/nabu:13/TKQ1.221114.001/V14.0.5.0.TKXMIXM:user/release-keys"
   resetprop -n ro.build.fingerprint "$FINGERPRINT" >/dev/null 2>&1
   resetprop -n ro.bootimage.build.fingerprint "$FINGERPRINT" >/dev/null 2>&1
@@ -61,6 +61,17 @@ if [ "$PRODUCT_DEVICE" = "nabu" ]; then
   resetprop -n ro.product.build.fingerprint "$FINGERPRINT" >/dev/null 2>&1
   resetprop -n ro.odm.build.fingerprint "$FINGERPRINT" >/dev/null 2>&1
   resetprop -n ro.system.build.fingerprint "$FINGERPRINT" >/dev/null 2>&1
+  resetprop -n ro.system_ext.build.fingerprint "$FINGERPRINT" >/dev/null 2>&1
+
+  # Match Android release version and security patch level with certified build
+  resetprop -n ro.build.version.release 13 >/dev/null 2>&1
+  resetprop -n ro.build.version.release_or_codename 13 >/dev/null 2>&1
+  resetprop -n ro.system.build.version.release 13 >/dev/null 2>&1
+  resetprop -n ro.system_ext.build.version.release 13 >/dev/null 2>&1
+  resetprop -n ro.build.version.security_patch 2023-09-01 >/dev/null 2>&1
+  resetprop -n ro.vendor.build.security_patch 2023-09-01 >/dev/null 2>&1
+  resetprop -n ro.keymaster.modlev 13000 >/dev/null 2>&1
+  resetprop -n ro.boot.keymaster.modlev 13000 >/dev/null 2>&1
 fi
 
 # --- Enable GMS components if disabled ---
