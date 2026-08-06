@@ -147,9 +147,6 @@ enforce_familylink_permissions() {
   setprop persist.sys.upload_apk_enable 0 >/dev/null 2>&1
   setprop persist.sys.package_verifier_enable 0 >/dev/null 2>&1
 
-  # Disable Play Store language change prompt loop (LocaleChangedModeActivity)
-  pm disable com.android.vending/com.google.android.finsky.localechangedmode.activity.LocaleChangedModeActivity >/dev/null 2>&1
-
   # Enable Google Advertising ID & disable Xiaomi ad tracking limits
   settings put global limit_ad_tracking 0 >/dev/null 2>&1
   settings put secure limit_ad_tracking 0 >/dev/null 2>&1
