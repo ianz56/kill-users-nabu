@@ -48,6 +48,14 @@ resetprop -n ro.boot.warranty_bit 0 >/dev/null 2>&1
 resetprop -n ro.warranty_bit 0 >/dev/null 2>&1
 resetprop -n ro.is_ever_orange 0 >/dev/null 2>&1
 
+# Spoof certified build fingerprint & security patch for Play Integrity MEETS_DEVICE_INTEGRITY
+resetprop -n ro.build.fingerprint Xiaomi/nabu_global/nabu:13/TKQ1.221114.001/V14.0.5.0.TKXMIXM:user/release-keys >/dev/null 2>&1
+resetprop -n ro.bootimage.build.fingerprint Xiaomi/nabu_global/nabu:13/TKQ1.221114.001/V14.0.5.0.TKXMIXM:user/release-keys >/dev/null 2>&1
+resetprop -n ro.vendor.build.fingerprint Xiaomi/nabu_global/nabu:13/TKQ1.221114.001/V14.0.5.0.TKXMIXM:user/release-keys >/dev/null 2>&1
+resetprop -n ro.product.build.fingerprint Xiaomi/nabu_global/nabu:13/TKQ1.221114.001/V14.0.5.0.TKXMIXM:user/release-keys >/dev/null 2>&1
+resetprop -n ro.odm.build.fingerprint Xiaomi/nabu_global/nabu:13/TKQ1.221114.001/V14.0.5.0.TKXMIXM:user/release-keys >/dev/null 2>&1
+resetprop -n ro.system.build.fingerprint Xiaomi/nabu_global/nabu:13/TKQ1.221114.001/V14.0.5.0.TKXMIXM:user/release-keys >/dev/null 2>&1
+
 # --- Enable GMS components if disabled ---
 log "Enabling Google Services Framework and Play Services..."
 pm enable com.google.android.gsf >> "$LOGFILE" 2>&1 &
