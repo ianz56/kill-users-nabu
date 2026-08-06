@@ -20,7 +20,6 @@ ro.boot.vbmeta.device_state=locked
 ro.boot.warranty_bit=0
 ro.warranty_bit=0
 ro.is_ever_orange=0
-ro.build.fingerprint=Xiaomi/nabu_global/nabu:13/TKQ1.221114.001/V14.0.5.0.TKXMIXM:user/release-keys
 
 # Disable MIUI Security Package Verifier & Enable Full Play Store Split Installation
 ro.miui.secure_install=0

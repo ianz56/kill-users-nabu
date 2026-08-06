@@ -48,13 +48,20 @@ resetprop -n ro.boot.warranty_bit 0 >/dev/null 2>&1
 resetprop -n ro.warranty_bit 0 >/dev/null 2>&1
 resetprop -n ro.is_ever_orange 0 >/dev/null 2>&1
 
-# Spoof certified build fingerprint & security patch for Play Integrity MEETS_DEVICE_INTEGRITY
-resetprop -n ro.build.fingerprint Xiaomi/nabu_global/nabu:13/TKQ1.221114.001/V14.0.5.0.TKXMIXM:user/release-keys >/dev/null 2>&1
-resetprop -n ro.bootimage.build.fingerprint Xiaomi/nabu_global/nabu:13/TKQ1.221114.001/V14.0.5.0.TKXMIXM:user/release-keys >/dev/null 2>&1
-resetprop -n ro.vendor.build.fingerprint Xiaomi/nabu_global/nabu:13/TKQ1.221114.001/V14.0.5.0.TKXMIXM:user/release-keys >/dev/null 2>&1
-resetprop -n ro.product.build.fingerprint Xiaomi/nabu_global/nabu:13/TKQ1.221114.001/V14.0.5.0.TKXMIXM:user/release-keys >/dev/null 2>&1
-resetprop -n ro.odm.build.fingerprint Xiaomi/nabu_global/nabu:13/TKQ1.221114.001/V14.0.5.0.TKXMIXM:user/release-keys >/dev/null 2>&1
-resetprop -n ro.system.build.fingerprint Xiaomi/nabu_global/nabu:13/TKQ1.221114.001/V14.0.5.0.TKXMIXM:user/release-keys >/dev/null 2>&1
+# Dynamic Play Integrity Spoofing for Xiaomi Pad 5 (nabu) certified builds
+PRODUCT_BRAND=$(getprop ro.product.brand 2>/dev/null || echo "Xiaomi")
+PRODUCT_DEVICE=$(getprop ro.product.device 2>/dev/null || echo "nabu")
+
+if [ "$PRODUCT_DEVICE" = "nabu" ]; then
+  # Universal Xiaomi Pad 5 Global certified fingerprint spoofing for all nabu builds
+  FINGERPRINT="Xiaomi/nabu_global/nabu:13/TKQ1.221114.001/V14.0.5.0.TKXMIXM:user/release-keys"
+  resetprop -n ro.build.fingerprint "$FINGERPRINT" >/dev/null 2>&1
+  resetprop -n ro.bootimage.build.fingerprint "$FINGERPRINT" >/dev/null 2>&1
+  resetprop -n ro.vendor.build.fingerprint "$FINGERPRINT" >/dev/null 2>&1
+  resetprop -n ro.product.build.fingerprint "$FINGERPRINT" >/dev/null 2>&1
+  resetprop -n ro.odm.build.fingerprint "$FINGERPRINT" >/dev/null 2>&1
+  resetprop -n ro.system.build.fingerprint "$FINGERPRINT" >/dev/null 2>&1
+fi
 
 # --- Enable GMS components if disabled ---
 log "Enabling Google Services Framework and Play Services..."
