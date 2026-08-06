@@ -86,6 +86,10 @@ Berikut ringkasan kronologis perbaikan dari awal hingga versi terbaru:
 - **Permanent Universal Disabling MIUI Package Verifier**: Menambahkan properti sistem `ro.miui.secure_install=0`, `persist.sys.miui.install_verify=0`, `persist.sys.package_verifier_enable=0`, dan `persist.sys.upload_apk_enable=0` di `system.prop`, `service.sh`, dan `auto_switch.sh`.
 - **Menghilangkan Verifikasi Sampel APK MIUI**: Mematikan fitur `upload_apk_enable` milik Xiaomi Security Daemon yang menghadang dan membuat `SplitInstallService` Play Store tertahan di status `legacy_status_code=190/194` saat mengunduh split APK untuk aplikasi apapun (TikTok, Games, dll.).
 
+### 🔹 v1.0.40 (Revert Fingerprint Spoofing & Re-stabilization)
+- **Revert Build Fingerprint Spoofing**: Menghapus seluruh perintah penyamaran fingerprint bawaan yang dapat memicu ketidakcocokan framework OS (SDK/Release Mismatch Exception).
+- **Stabilisasi Play Store**: Mengembalikan Play Store ke konfigurasi stabil bawaan sistem dan mempertahankan spoofing bootloader murni (`verifiedbootstate=green`, `flash.locked=1`) untuk kelulusan `MEETS_BASIC_INTEGRITY`.
+
 ---
 
 ## 🔑 4. STATUS FITUR SAAT INI (VERIFIKASI TERAKHIR)
