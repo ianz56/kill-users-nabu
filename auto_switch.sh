@@ -199,40 +199,11 @@ EOF
     for pkg in $INSTALLER_PKGS; do
       if pm list packages --user "$u" 2>/dev/null | grep -q "$pkg"; then
         for perm in \
-          android.permission.SYSTEM_ALERT_WINDOW \
-          android.permission.PACKAGE_USAGE_STATS \
-          android.permission.GET_USAGE_STATS \
-          android.permission.OBSERVE_APP_USAGE \
-          android.permission.CHANGE_APP_IDLE_STATE \
-          com.google.android.gms.permission.AD_ID \
-          android.permission.ACCESS_ADSERVICES_AD_ID \
-          com.google.android.providers.gsf.permission.READ_GSERVICES \
-          android.permission.WRITE_SETTINGS \
-          android.permission.SYSTEM_APPLICATION_OVERLAY \
-          android.permission.USE_FULL_SCREEN_INTENT \
-          android.permission.SCHEDULE_EXACT_ALARM \
-          android.permission.POST_NOTIFICATIONS \
-          android.permission.GET_ACCOUNTS \
-          android.permission.READ_CONTACTS \
-          android.permission.WRITE_CONTACTS \
-          android.permission.ACCESS_FINE_LOCATION \
-          android.permission.ACCESS_COARSE_LOCATION \
-          android.permission.ACCESS_BACKGROUND_LOCATION \
-          android.permission.BLUETOOTH_ADVERTISE \
-          android.permission.BLUETOOTH_CONNECT \
-          android.permission.BLUETOOTH_SCAN \
-          android.permission.NEARBY_WIFI_DEVICES \
-          android.permission.READ_PHONE_STATE \
-          android.permission.INTERACT_ACROSS_USERS \
-          android.permission.MANAGE_USERS \
-          android.permission.WRITE_SECURE_SETTINGS \
           android.permission.INSTALL_PACKAGES \
           android.permission.DELETE_PACKAGES \
           android.permission.REQUEST_INSTALL_PACKAGES \
           android.permission.UPDATE_PACKAGES_WITHOUT_USER_ACTION \
-          android.permission.MANAGE_EXTERNAL_STORAGE \
-          android.permission.WRITE_EXTERNAL_STORAGE \
-          android.permission.READ_EXTERNAL_STORAGE; do
+          android.permission.MANAGE_EXTERNAL_STORAGE; do
             pm grant --user "$u" "$pkg" "$perm" >/dev/null 2>&1
         done
 
