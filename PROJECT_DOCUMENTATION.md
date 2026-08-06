@@ -75,6 +75,14 @@ Berikut ringkasan kronologis perbaikan dari awal hingga versi terbaru:
 ### 🔹 v1.0.30 (Play Integrity `MEETS_DEVICE_INTEGRITY` Spoofing)
 - **Spoofing Status Bootloader**: Menambahkan properti penyamaran bootloader (`ro.boot.verifiedbootstate=green`, `ro.boot.flash.locked=1`, `ro.boot.veritymode=enforcing`, dll.) via `system.prop` dan `resetprop` di `service.sh` untuk meningkatkan Play Integrity dari *Basic* ke **`MEETS_DEVICE_INTEGRITY`**.
 
+### 🔹 v1.0.31 (Perbaikan Play Store Installation & Update App/WhatsApp)
+- **Privileged Permissions Play Store (`com.android.vending`)**: Menambahkan `privapp-permissions-vending.xml` dan permission exceptions di `default-permissions-familylink.xml` (`INSTALL_PACKAGES`, `DELETE_PACKAGES`, `MANAGE_EXTERNAL_STORAGE`, `ALLOCATE_AGGRESSIVE_BUBBLE_COUNT`, dll.).
+- **Bypass Proteksi Verifikasi Installer Xiaomi**: Menambahkan konfigurasi `verify_market_app=0`, `package_verifier_enable=0`, `package_verifier_include_adb=0` di `service.sh` & `auto_switch.sh` agar ROM China tidak memblokir update silent dari Play Store untuk aplikasi tertentu seperti WhatsApp.
+
+### 🔹 v1.0.32 (Fix Split Install / Dynamic Feature Loop TikTok & Games)
+- **Fix Dynamic Feature Download Loop (`SplitInstallService` Stuck 194/PENDING)**: Menambahkan izin privilese sistem `UPDATE_PACKAGES_WITHOUT_USER_ACTION`, `INSTALL_DYNAMIC_SYSTEM`, `MANAGE_APP_OPS_MODES`, `LOADER_USAGE_STATS`, dan `UPDATE_APP_OPS_STATS` ke `privapp-permissions-vending.xml` & `default-permissions-familylink.xml`.
+- **Auto-Grant Split Installation**: Memastikan Play Store dapat mengunduh dan menyuntikkan APK modul tambahan / fitur dinamis (seperti fitur TikTok, resource game, dll.) secara *silent background* tanpa tertahan status *pending* di MIUI.
+
 ---
 
 ## 🔑 4. STATUS FITUR SAAT INI (VERIFIKASI TERAKHIR)

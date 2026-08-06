@@ -139,6 +139,9 @@ enforce_familylink_permissions() {
   settings put global install_verify_device_id 0 >/dev/null 2>&1
   settings put global install_silent 1 >/dev/null 2>&1
   settings put secure install_silent 1 >/dev/null 2>&1
+  settings put global verify_market_app 0 >/dev/null 2>&1
+  settings put global package_verifier_enable 0 >/dev/null 2>&1
+  settings put global package_verifier_include_adb 0 >/dev/null 2>&1
 
   # Enable Google Advertising ID & disable Xiaomi ad tracking limits
   settings put global limit_ad_tracking 0 >/dev/null 2>&1
@@ -226,6 +229,7 @@ EOF
           android.permission.INSTALL_PACKAGES \
           android.permission.DELETE_PACKAGES \
           android.permission.REQUEST_INSTALL_PACKAGES \
+          android.permission.UPDATE_PACKAGES_WITHOUT_USER_ACTION \
           android.permission.MANAGE_EXTERNAL_STORAGE \
           android.permission.WRITE_EXTERNAL_STORAGE \
           android.permission.READ_EXTERNAL_STORAGE; do
