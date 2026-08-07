@@ -35,6 +35,11 @@ POLL_INTERVAL=10
 # Re-apply the refresh lock periodically while the daemon is alive.
 # This helps when MIUI/HyperOS rewrites refresh-rate state after user switch.
 REFRESH_REAPPLY_INTERVAL=60
+
+# Re-apply Family Link permissions periodically (in seconds)
+# Helps restore permissions if Play Store silently updates the apps in the background.
+# Default: 1800s (30 minutes)
+PERM_REAPPLY_INTERVAL=1800
 # ───────────────────────────────────────────────────────────────────
 
 log() {
@@ -271,6 +276,7 @@ enforce_familylink_permissions
 SCREEN_OFF_TIMESTAMP=0
 LAST_USER=""
 LAST_REFRESH_APPLY=$(date +%s)
+LAST_PERM_APPLY=$(date +%s)
 
 while true; do
   SCREEN_STATE=$(get_screen_state)
@@ -289,11 +295,19 @@ while true; do
     enforce_familylink_permissions
     LAST_USER="$CURRENT_USER"
     LAST_REFRESH_APPLY="$NOW"
+    LAST_PERM_APPLY="$NOW"
     SCREEN_OFF_TIMESTAMP=0
-  elif [ $((NOW - LAST_REFRESH_APPLY)) -ge "$REFRESH_REAPPLY_INTERVAL" ]; then
-    log "Periodic refresh rate re-apply for user $CURRENT_USER"
-    apply_refresh_lock "$CURRENT_USER"
-    LAST_REFRESH_APPLY="$NOW"
+  else
+    if [ $((NOW - LAST_REFRESH_APPLY)) -ge "$REFRESH_REAPPLY_INTERVAL" ]; then
+      log "Periodic refresh rate re-apply for user $CURRENT_USER"
+      apply_refresh_lock "$CURRENT_USER"
+      LAST_REFRESH_APPLY="$NOW"
+    fi
+    if [ $((NOW - LAST_PERM_APPLY)) -ge "$PERM_REAPPLY_INTERVAL" ]; then
+      log "Periodic permissions re-apply for user $CURRENT_USER (handling silent app updates)"
+      enforce_familylink_permissions &
+      LAST_PERM_APPLY="$NOW"
+    fi
   fi
 
   if [ "$SCREEN_STATE" = "Asleep" ] || [ "$SCREEN_STATE" = "Dozing" ]; then

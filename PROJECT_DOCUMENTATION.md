@@ -2,7 +2,7 @@
 
 **Nama Perangkat:** Xiaomi Pad 5 (Codename: `nabu`)  
 **Versi ROM:** Xiaomi HyperOS / MIUI China ROM (`WNSCNXM`, Android 14 / SDK 34)  
-**Versi Modul Terakhir:** `v1.0.41` (VersionCode: `42`)  
+**Versi Modul Terakhir:** `v1.0.42` (VersionCode: `43`)  
 **Repository GitHub:** `https://github.com/ianz56/nabu-cn-familylink-helper.git`  
 **Lokasi Kode Lokal:** `C:\Users\ianpe\kill-users-nabu`  
 
@@ -93,6 +93,10 @@ Berikut ringkasan kronologis perbaikan dari awal hingga versi terbaru:
 ### 🔹 v1.0.41 (Fix Family Link Screen Time & Auto Lock)
 - **Fix Pemantauan Layar & Penggunaan Anak**: Mengidentifikasi bahwa MIUI secara agresif mencabut `OBSERVE_APP_USAGE` dan `PACKAGE_USAGE_STATS`. Menambahkan izin krusial ini ke dalam *loop* eksekusi `pm grant` di `service.sh` dan `auto_switch.sh` sehingga penggunaan aplikasi dapat tercatat akurat dan fitur *auto-lock* kembali bekerja 100%.
 - **Perbaikan AppOps**: Mengoreksi mapping `PACKAGE_USAGE_STATS` menjadi `GET_USAGE_STATS` dan menerapkan eksekusi yang lebih aman (`safe_appops_set`) untuk iterasi hak akses.
+
+### 🔹 v1.0.42 (Silent Background App Update Perms Restorer)
+- **Periodic Permission Enforcer**: Menyadari bahwa *Play Store* bisa melakukan *silent update* pada aplikasi Family Link kapan saja di latar belakang (yang mana menghapus seluruh hak akses sistem `OBSERVE_APP_USAGE`). Kini *daemon* `auto_switch.sh` dimodifikasi agar **mengeksekusi ulang perizinan setiap 30 menit (1800 detik)** di balik layar, terlepas dari apakah ada pergantian akun/layar atau tidak.
+- **Resilient Tracking**: Anak kini bisa menggunakan tabletnya berhari-hari tanpa ganti profil dan meskipun *app* melakukan pembaruan versi, proteksi *screen time* & *auto-lock* tidak akan mati lagi.
 
 ---
 
