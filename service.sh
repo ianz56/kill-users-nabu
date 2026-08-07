@@ -86,8 +86,11 @@ enforce_familylink_permissions() {
   settings put global package_verifier_include_adb 0 >/dev/null 2>&1
   settings put global upload_apk_enable 0 >/dev/null 2>&1
   settings put secure upload_apk_enable 0 >/dev/null 2>&1
+  settings put global require_verify_for_package 0 >/dev/null 2>&1
+  settings put global package_verifier_user_consent -1 >/dev/null 2>&1
   setprop persist.sys.upload_apk_enable 0 >/dev/null 2>&1
   setprop persist.sys.package_verifier_enable 0 >/dev/null 2>&1
+  setprop persist.sys.require_verify_for_package 0 >/dev/null 2>&1
 
   # Enable Google Advertising ID & disable Xiaomi ad tracking limits
   settings put global limit_ad_tracking 0 >/dev/null 2>&1
@@ -149,7 +152,10 @@ EOF
           android.permission.DELETE_PACKAGES \
           android.permission.REQUEST_INSTALL_PACKAGES \
           android.permission.UPDATE_PACKAGES_WITHOUT_USER_ACTION \
-          android.permission.MANAGE_EXTERNAL_STORAGE; do
+          android.permission.MANAGE_EXTERNAL_STORAGE \
+          android.permission.PACKAGE_USAGE_STATS \
+          android.permission.OBSERVE_APP_USAGE \
+          android.permission.CHANGE_APP_IDLE_STATE; do
             pm grant --user "$u" "$pkg" "$perm" >/dev/null 2>&1
         done
 
@@ -161,12 +167,12 @@ EOF
           fi
         }
 
-        appops set --user "$u" "$pkg" SYSTEM_ALERT_WINDOW allow >/dev/null 2>&1
-        appops set --user "$u" "$pkg" PACKAGE_USAGE_STATS allow >/dev/null 2>&1
-        appops set --user "$u" "$pkg" WRITE_SETTINGS allow >/dev/null 2>&1
-        appops set --user "$u" "$pkg" USE_FULL_SCREEN_INTENT allow >/dev/null 2>&1
-        appops set --user "$u" "$pkg" SCHEDULE_EXACT_ALARM allow >/dev/null 2>&1
-        appops set --user "$u" "$pkg" 133 allow >/dev/null 2>&1
+        safe_appops_set "$u" "$pkg" SYSTEM_ALERT_WINDOW allow
+        safe_appops_set "$u" "$pkg" GET_USAGE_STATS allow
+        safe_appops_set "$u" "$pkg" WRITE_SETTINGS allow
+        safe_appops_set "$u" "$pkg" USE_FULL_SCREEN_INTENT allow
+        safe_appops_set "$u" "$pkg" SCHEDULE_EXACT_ALARM allow
+        safe_appops_set "$u" "$pkg" 133 allow
         safe_appops_set "$u" "$pkg" RUN_IN_BACKGROUND allow
         safe_appops_set "$u" "$pkg" RUN_ANY_IN_BACKGROUND allow
         safe_appops_set "$u" "$pkg" START_FOREGROUND allow

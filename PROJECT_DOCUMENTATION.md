@@ -2,7 +2,7 @@
 
 **Nama Perangkat:** Xiaomi Pad 5 (Codename: `nabu`)  
 **Versi ROM:** Xiaomi HyperOS / MIUI China ROM (`WNSCNXM`, Android 14 / SDK 34)  
-**Versi Modul Terakhir:** `v1.0.30` (VersionCode: `31`)  
+**Versi Modul Terakhir:** `v1.0.41` (VersionCode: `42`)  
 **Repository GitHub:** `https://github.com/ianz56/nabu-cn-familylink-helper.git`  
 **Lokasi Kode Lokal:** `C:\Users\ianpe\kill-users-nabu`  
 
@@ -90,6 +90,10 @@ Berikut ringkasan kronologis perbaikan dari awal hingga versi terbaru:
 - **Revert Build Fingerprint Spoofing**: Menghapus seluruh perintah penyamaran fingerprint bawaan yang dapat memicu ketidakcocokan framework OS (SDK/Release Mismatch Exception).
 - **Stabilisasi Play Store**: Mengembalikan Play Store ke konfigurasi stabil bawaan sistem dan mempertahankan spoofing bootloader murni (`verifiedbootstate=green`, `flash.locked=1`) untuk kelulusan `MEETS_BASIC_INTEGRITY`.
 
+### 🔹 v1.0.41 (Fix Family Link Screen Time & Auto Lock)
+- **Fix Pemantauan Layar & Penggunaan Anak**: Mengidentifikasi bahwa MIUI secara agresif mencabut `OBSERVE_APP_USAGE` dan `PACKAGE_USAGE_STATS`. Menambahkan izin krusial ini ke dalam *loop* eksekusi `pm grant` di `service.sh` dan `auto_switch.sh` sehingga penggunaan aplikasi dapat tercatat akurat dan fitur *auto-lock* kembali bekerja 100%.
+- **Perbaikan AppOps**: Mengoreksi mapping `PACKAGE_USAGE_STATS` menjadi `GET_USAGE_STATS` dan menerapkan eksekusi yang lebih aman (`safe_appops_set`) untuk iterasi hak akses.
+
 ---
 
 ## 🔑 4. STATUS FITUR SAAT INI (VERIFIKASI TERAKHIR)
@@ -111,7 +115,7 @@ Berikut ringkasan kronologis perbaikan dari awal hingga versi terbaru:
 
 Jika Anda memulai perbincangan di **Chat Baru (New Conversation)**, berikan petunjuk singkat berikut ke AI:
 
-> *"Saya ingin melanjutkan pengembangan modul Magisk `nabu-cn-familylink-helper` (terakhir v1.0.30) di `C:\Users\ianpe\kill-users-nabu`. Silakan baca file dokumentasi proyek di `README.md` / `PROJECT_DOCUMENTATION.md` untuk memahami seluruh arsitektur dan status terakhir."*
+> *"Saya ingin melanjutkan pengembangan modul Magisk `nabu-cn-familylink-helper` (terakhir v1.0.41) di `C:\Users\ianpe\kill-users-nabu`. Silakan baca file dokumentasi proyek di `README.md` / `PROJECT_DOCUMENTATION.md` untuk memahami seluruh arsitektur dan status terakhir."*
 
 ### Perintah Penting untuk Build & Flash:
 1. **Build Modul Baru**:
